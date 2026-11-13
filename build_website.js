@@ -1,0 +1,1853 @@
+const fs = require('fs');
+const path = require('path');
+
+const baseDir = __dirname;
+const imgDir = path.join(baseDir, 'assets', 'images');
+const videoDir = path.join(baseDir, 'assets', 'video');
+const fontsDir = path.join(baseDir, 'assets', 'fonts');
+
+// Helper to get base64 data uri
+function getDataUri(filePath, mime) {
+  const buf = fs.readFileSync(filePath);
+  return `data:${mime};base64,${buf.toString('base64')}`;
+}
+
+console.log('Loading asset buffers...');
+const assets = {
+  // Images
+  uniformedServer: {
+    rel: 'assets/images/uniformed-server.jpg',
+    uri: getDataUri(path.join(imgDir, 'uniformed-server.jpg'), 'image/jpeg')
+  },
+  townhallSpeaker: {
+    rel: 'assets/images/corporate-townhall-speaker.jpg',
+    uri: getDataUri(path.join(imgDir, 'corporate-townhall-speaker.jpg'), 'image/jpeg')
+  },
+  chafingDishes: {
+    rel: 'assets/images/chafing-dishes-buffet.jpg',
+    uri: getDataUri(path.join(imgDir, 'chafing-dishes-buffet.jpg'), 'image/jpeg')
+  },
+  southIndianThali: {
+    rel: 'assets/images/south-indian-thali.jpg',
+    uri: getDataUri(path.join(imgDir, 'south-indian-thali.jpg'), 'image/jpeg')
+  },
+  filterCoffee: {
+    rel: 'assets/images/filter-coffee-brass.jpg',
+    uri: getDataUri(path.join(imgDir, 'filter-coffee-brass.jpg'), 'image/jpeg')
+  },
+  chefCooking: {
+    rel: 'assets/images/chef-cooking.jpg',
+    uri: getDataUri(path.join(imgDir, 'chef-cooking.jpg'), 'image/jpeg')
+  },
+  dumBiryani: {
+    rel: 'assets/images/dum-biryani-claypot.jpg',
+    uri: getDataUri(path.join(imgDir, 'dum-biryani-claypot.jpg'), 'image/jpeg')
+  },
+  teamLunchOffice: {
+    rel: 'assets/images/team-lunch-office.jpg',
+    uri: getDataUri(path.join(imgDir, 'team-lunch-office.jpg'), 'image/jpeg')
+  },
+  curryChafing: {
+    rel: 'assets/images/curry-chafing-dish.jpg',
+    uri: getDataUri(path.join(imgDir, 'curry-chafing-dish.jpg'), 'image/jpeg')
+  },
+  banquetHall: {
+    rel: 'assets/images/banquet-hall.jpg',
+    uri: getDataUri(path.join(imgDir, 'banquet-hall.jpg'), 'image/jpeg')
+  },
+  corporateBuffet: {
+    rel: 'assets/images/corporate-buffet.jpg',
+    uri: getDataUri(path.join(imgDir, 'corporate-buffet.jpg'), 'image/jpeg')
+  },
+  officeCafeteria: {
+    rel: 'assets/images/office-cafeteria.jpg',
+    uri: getDataUri(path.join(imgDir, 'office-cafeteria.jpg'), 'image/jpeg')
+  },
+  festiveSadya: {
+    rel: 'assets/images/festive-sadya-leaf.jpg',
+    uri: getDataUri(path.join(imgDir, 'festive-sadya-leaf.jpg'), 'image/jpeg')
+  },
+  idliVadaBreakfast: {
+    rel: 'assets/images/idli-vada-breakfast.jpg',
+    uri: getDataUri(path.join(imgDir, 'idli-vada-breakfast.jpg'), 'image/jpeg')
+  },
+  kitchenChefs: {
+    rel: 'assets/images/kitchen-range-chefs.jpg',
+    uri: getDataUri(path.join(imgDir, 'kitchen-range-chefs.jpg'), 'image/jpeg')
+  },
+  appamSweets: {
+    rel: 'assets/images/appam-sweets-feast.jpg',
+    uri: getDataUri(path.join(imgDir, 'appam-sweets-feast.jpg'), 'image/jpeg')
+  },
+  videoPoster: {
+    rel: 'assets/images/video-poster-dosa.jpg',
+    uri: getDataUri(path.join(imgDir, 'video-poster-dosa.jpg'), 'image/jpeg')
+  },
+  // Video
+  videoDosa: {
+    rel: 'assets/video/kitchen-dosa-film.mp4',
+    uri: getDataUri(path.join(videoDir, 'kitchen-dosa-film.mp4'), 'video/mp4')
+  },
+  // Fonts
+  fontLatin: {
+    rel: 'assets/fonts/plus-jakartasans-latin.woff2',
+    uri: getDataUri(path.join(fontsDir, 'plus-jakartasans-latin.woff2'), 'font/woff2')
+  },
+  fontLatinExt: {
+    rel: 'assets/fonts/plus-jakartasans-latin-ext.woff2',
+    uri: getDataUri(path.join(fontsDir, 'plus-jakartasans-latin-ext.woff2'), 'font/woff2')
+  }
+};
+console.log('Assets loaded successfully into memory.');
+
+function generateHTML(isSelfContained) {
+  // Helper to pick source
+  const src = (assetKey) => isSelfContained ? assets[assetKey].uri : assets[assetKey].rel;
+  const fontSrcLatin = isSelfContained ? assets.fontLatin.uri : 'assets/fonts/plus-jakartasans-latin.woff2';
+  const fontSrcLatinExt = isSelfContained ? assets.fontLatinExt.uri : 'assets/fonts/plus-jakartasans-latin-ext.woff2';
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Annam — Authentic South Indian Corporate Catering</title>
+  <meta name="description" content="Freshly cooked South Indian tiffins, daily office meals, festive sadyas, and executive boardroom dining delivered on time, every day.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* Embedded Font Definitions */
+    @font-face {
+      font-family: 'Plus Jakarta Sans';
+      font-style: normal;
+      font-weight: 400 800;
+      font-display: swap;
+      src: url("${fontSrcLatin}") format('woff2');
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+
+    :root {
+      --accent: #F2A413;
+      --accent-hover: #d98f09;
+      --green-dark: #123524;
+      --green-deep: #0b2216;
+      --green-card: #18422e;
+      --text-main: #16241C;
+      --text-muted: #4A5750;
+      --text-light: #C5D1C8;
+      --bg-cream: #F6F3EC;
+      --bg-white: #FFFFFF;
+      --border-subtle: rgba(18, 53, 36, 0.12);
+      --font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg-white);
+      color: var(--text-main);
+      font-family: var(--font-family);
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: clip;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: var(--green-dark); text-decoration: none; transition: color 0.2s ease; }
+    a:hover { color: var(--green-dark); }
+    section[id] { scroll-margin-top: 96px; }
+
+    :focus-visible { outline: 2px solid var(--green-dark); outline-offset: 3px; border-radius: 6px; }
+    .on-dark :focus-visible { outline-color: var(--accent); }
+
+    /* Animations */
+    @keyframes ldOut { to { opacity: 0; visibility: hidden; } }
+    @keyframes ldBar { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+    @keyframes ldWord { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+    @keyframes rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+    @keyframes wipe { from { clip-path: inset(100% 0 0 0 round 24px); } to { clip-path: inset(0 0 0 0 round 24px); } }
+    @keyframes strip { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+    @keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+    @keyframes pulseGlow { 0%, 100% { transform: scale(1); box-shadow: 0 16px 32px -14px rgba(18,53,36,.7); } 50% { transform: scale(1.03); box-shadow: 0 20px 40px -10px rgba(242,164,19,.7); } }
+
+    .loader {
+      position: fixed; inset: 0; z-index: 2000;
+      background: var(--green-dark); color: #FFFFFF;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px;
+      animation: ldOut 0.8s ease 1.8s forwards;
+      pointer-events: none;
+    }
+    .ld-bar { transform-origin: left center; animation: ldBar 1.5s cubic-bezier(.6,0,.2,1) both; }
+    .ld-word { animation: ldWord .9s ease both; }
+
+    .h-rise { animation: rise .9s cubic-bezier(.2,.7,.2,1) both; }
+    .h-wipe { animation: wipe 1.3s cubic-bezier(.3,.7,.2,1) both; }
+    .bob { animation: bob 6s ease-in-out infinite; }
+
+    /* Infinite Marquee */
+    .strip { overflow: hidden; width: 100%; position: relative; }
+    .strip::before, .strip::after {
+      content: ""; position: absolute; top: 0; bottom: 0; width: 80px; z-index: 2; pointer-events: none;
+    }
+    .strip::before { left: 0; background: linear-gradient(to right, #FFFFFF, transparent); }
+    .strip::after { right: 0; background: linear-gradient(to left, #FFFFFF, transparent); }
+    .strip-track { display: flex; gap: 20px; width: max-content; padding-left: 20px; animation: strip 65s linear infinite; }
+    .strip:hover .strip-track { animation-play-state: paused; }
+
+    .menu-fade { animation: fadeUp .4s ease both; }
+
+    /* Scroll reveal */
+    [data-reveal] {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.8s cubic-bezier(.16, 1, .3, 1), transform 0.8s cubic-bezier(.16, 1, .3, 1);
+      will-change: opacity, transform;
+    }
+    [data-reveal].data-in {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* Cards */
+    .card {
+      transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+      background: #FFFFFF;
+      border: 1px solid var(--border-subtle);
+    }
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 24px 48px -24px rgba(18,53,36,.35);
+      border-color: rgba(18,53,36,.3);
+    }
+
+    .zoom { overflow: hidden; position: relative; }
+    .zoom img { transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+    .card:hover .zoom img, .zoom:hover img { transform: scale(1.06); }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      padding: 0 26px; border-radius: 10px; font-weight: 700; font-size: 15px;
+      font-family: inherit; text-decoration: none; cursor: pointer; border: none;
+      transition: transform .2s ease, box-shadow .2s ease, background .2s ease, color .2s ease;
+      box-sizing: border-box; min-height: 50px;
+    }
+    .btn-accent {
+      background: var(--accent); color: var(--green-dark);
+    }
+    .btn-accent:hover {
+      background: var(--accent-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 14px 26px -12px rgba(18,53,36,.5);
+    }
+    .btn-line {
+      background: transparent; color: var(--green-dark);
+      border: 1.5px solid var(--green-dark);
+    }
+    .btn-line:hover {
+      background: var(--green-dark); color: #FFFFFF;
+      transform: translateY(-2px);
+      box-shadow: 0 14px 26px -14px rgba(18,53,36,.5);
+    }
+    .btn-white {
+      background: #FFFFFF; color: var(--green-dark);
+    }
+    .btn-white:hover {
+      background: #F6F3EC;
+      transform: translateY(-2px);
+      box-shadow: 0 14px 26px -14px rgba(0,0,0,.3);
+    }
+
+    /* Links */
+    .navlink {
+      text-decoration: none; position: relative; padding: 8px 0; color: var(--green-dark); font-weight: 600;
+    }
+    .navlink::after {
+      content: ""; position: absolute; left: 0; right: 100%; bottom: 0; height: 2px;
+      background: var(--accent); transition: right .25s ease;
+    }
+    .navlink:hover::after, .navlink.active::after { right: 0; }
+
+    .more {
+      text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+      font-weight: 700; font-size: 15px; color: var(--green-dark);
+    }
+    .more svg { transition: transform .25s ease; }
+    .more:hover svg { transform: translateX(5px); }
+
+    /* Forms */
+    .field {
+      width: 100%; min-height: 50px; padding: 0 14px;
+      border: 1px solid rgba(18,53,36,.28); border-radius: 10px;
+      background: #FFFFFF; font: 500 15px var(--font-family); color: var(--text-main);
+      box-sizing: border-box; transition: border-color .2s ease, box-shadow .2s ease;
+    }
+    .field:focus {
+      outline: none; border-color: var(--green-dark);
+      box-shadow: 0 0 0 3px rgba(242,164,19,.35);
+    }
+
+    /* FAQ accordion */
+    .faq-item {
+      border-bottom: 1px solid rgba(18,53,36,.16);
+      transition: background 0.2s ease;
+    }
+    .faq-btn {
+      width: 100%; min-height: 68px; padding: 18px 0;
+      display: flex; align-items: center; justify-content: space-between; gap: 20px;
+      background: none; border: none; cursor: pointer; text-align: left;
+      font: 700 18px var(--font-family); color: var(--green-dark);
+    }
+    .faq-sign {
+      flex: none; width: 34px; height: 34px; border-radius: 50%;
+      display: inline-flex; align-items: center; justify-content: center;
+      background: var(--bg-cream); font-size: 20px; font-weight: 500; line-height: 1;
+      transition: background .2s ease, transform .25s ease;
+    }
+    .faq-content {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.35s cubic-bezier(0, 1, 0, 1), opacity 0.3s ease;
+      opacity: 0;
+    }
+    .faq-item.open .faq-content {
+      max-height: 300px; opacity: 1;
+      transition: max-height 0.4s ease-in-out, opacity 0.3s ease;
+    }
+    .faq-item.open .faq-sign {
+      background: var(--accent);
+      transform: rotate(180deg);
+    }
+
+    /* Floating CTA */
+    .float-cta {
+      position: fixed; right: 24px; bottom: 24px; z-index: 100;
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 0 24px; border-radius: 999px; min-height: 54px;
+      background: var(--accent); color: var(--green-dark);
+      font-weight: 800; font-size: 15px; text-decoration: none;
+      box-shadow: 0 16px 32px -14px rgba(18,53,36,.7);
+      transition: transform .25s ease, box-shadow .25s ease;
+      animation: pulseGlow 4s ease-in-out infinite;
+    }
+    .float-cta:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 22px 38px -12px rgba(18,53,36,.85);
+    }
+
+    /* Mobile menu */
+    .mobile-menu-btn {
+      display: none; background: none; border: none; cursor: pointer; padding: 8px; color: var(--green-dark);
+    }
+    .mobile-nav {
+      display: none; position: fixed; inset: 70px 0 0 0; background: rgba(255,255,255,0.98);
+      backdrop-filter: blur(12px); z-index: 99; flex-direction: column; padding: 24px 32px; gap: 20px;
+    }
+    .mobile-nav.open { display: flex; }
+
+    @media (max-width: 1020px) {
+      .nav-links { display: none !important; }
+      .mobile-menu-btn { display: inline-flex !important; }
+    }
+    @media (max-width: 720px) {
+      .topbar-extra { display: none !important; }
+      .float-chip { display: none !important; }
+      .hero-slider-container { height: 400px !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LOADER SCREEN -->
+  <div class="loader" id="siteLoader" aria-hidden="true">
+    <span class="ld-word" style="display: inline-flex; align-items: center; gap: 12px; font-weight: 800; font-size: 42px; letter-spacing: -0.03em">
+      <span style="display: inline-block; width: 14px; height: 14px; border-radius: 50%; background: var(--accent)"></span>
+      Annam
+    </span>
+    <span style="position: relative; width: 220px; height: 3px; border-radius: 3px; background: rgba(255,255,255,.18); overflow: hidden">
+      <span class="ld-bar" style="position: absolute; inset: 0; background: var(--accent)"></span>
+    </span>
+    <span style="font-size: 13px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: #C5D1C8">
+      Corporate Catering
+    </span>
+  </div>
+
+  <!-- TOP BAR -->
+  <aside class="on-dark" style="background: var(--green-dark); color: #FFFFFF; font-size: 13px">
+    <div style="max-width: 1280px; margin: 0 auto; padding: 8px 32px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 24px">
+      <span>Serving Bangalore · Hyderabad · Chennai</span>
+      <div class="topbar-extra" style="display: inline-flex; flex-wrap: wrap; gap: 6px 24px; color: #C5D1C8">
+        <span>FSSAI-licensed central kitchen</span>
+        <span>GST invoicing</span>
+        <span>+91 98450 12345</span>
+        <span>workplace@annamcatering.com</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- STICKY HEADER -->
+  <header style="position: sticky; top: 0; z-index: 60; background: rgba(255,255,255,.94); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(18,53,36,.1)">
+    <div style="max-width: 1280px; margin: 0 auto; padding: 14px 32px; display: flex; align-items: center; justify-content: space-between; gap: 24px">
+      <a href="#top" style="display: inline-flex; align-items: center; gap: 10px; min-height: 44px; text-decoration: none; font-weight: 800; font-size: 26px; letter-spacing: -0.03em; color: var(--green-dark)">
+        <span style="display: inline-block; width: 11px; height: 11px; border-radius: 50%; background: var(--accent)"></span>
+        Annam
+        <span style="font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: #4A5750; margin-left: 2px">Corporate Catering</span>
+      </a>
+
+      <nav class="nav-links" aria-label="Primary" style="display: flex; align-items: center; gap: 30px; font-size: 15px; font-weight: 600">
+        <a class="navlink" href="#solutions">Solutions</a>
+        <a class="navlink" href="#why">Why Annam</a>
+        <a class="navlink" href="#process">How it works</a>
+        <a class="navlink" href="#menus">Menus</a>
+        <a class="navlink" href="#plans">Plans</a>
+        <a class="navlink" href="#kitchen">Kitchen</a>
+        <a class="navlink" href="#faq">FAQs</a>
+      </nav>
+
+      <div style="display: flex; align-items: center; gap: 14px">
+        <a class="btn btn-accent" href="#enquire">Get Proposal</a>
+        <button class="mobile-menu-btn" id="mobileMenuToggle" aria-label="Toggle navigation menu">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MOBILE NAVIGATION DRAWER -->
+  <div class="mobile-nav" id="mobileNav">
+    <a class="navlink" href="#solutions" onclick="toggleMobileNav()">Solutions</a>
+    <a class="navlink" href="#why" onclick="toggleMobileNav()">Why Annam</a>
+    <a class="navlink" href="#process" onclick="toggleMobileNav()">How it works</a>
+    <a class="navlink" href="#menus" onclick="toggleMobileNav()">Menus</a>
+    <a class="navlink" href="#plans" onclick="toggleMobileNav()">Plans</a>
+    <a class="navlink" href="#kitchen" onclick="toggleMobileNav()">Kitchen</a>
+    <a class="navlink" href="#faq" onclick="toggleMobileNav()">FAQs</a>
+    <a class="btn btn-accent" href="#enquire" onclick="toggleMobileNav()" style="margin-top: 14px">Request a Proposal</a>
+  </div>
+
+  <main>
+    <!-- SECTION 1: HERO -->
+    <section id="top" style="max-width: 1280px; margin: 0 auto; padding: 64px 32px 80px; display: flex; flex-wrap: wrap; align-items: center; gap: 56px">
+      <div style="flex: 1 1 480px; min-width: 0; display: flex; flex-direction: column; gap: 24px">
+        <span class="h-rise" style="animation-delay: 0.1s; align-self: flex-start; display: inline-flex; align-items: center; gap: 10px; padding: 8px 16px; border-radius: 999px; background: var(--bg-cream); font-size: 13px; font-weight: 700; color: var(--green-dark)">
+          <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--accent)"></span>
+          South Indian Corporate Catering in Bangalore & Tech Hubs
+        </span>
+        <h1 class="h-rise" style="animation-delay: 0.2s; margin: 0; font-weight: 800; font-size: clamp(38px, 4.8vw, 64px); line-height: 1.05; letter-spacing: -0.035em; color: var(--green-dark)">
+          Workplace meals your teams look forward to, delivered on time, every day.
+        </h1>
+        <p class="h-rise" style="animation-delay: 0.3s; margin: 0; color: var(--text-muted); font-size: 18px; max-width: 540px">
+          Daily meal programmes, cafeteria management and event catering from our own FSSAI-licensed central kitchen, with one dedicated account manager and one consolidated monthly invoice.
+        </p>
+
+        <!-- HERO QUICK QUOTE FORM -->
+        <div class="h-rise" style="animation-delay: 0.4s; background: #FFFFFF; border: 1px solid rgba(18,53,36,.14); border-radius: 18px; padding: 22px; box-shadow: 0 30px 60px -40px rgba(18,53,36,.5)">
+          <div id="heroSuccess" style="display: none;" class="menu-fade">
+            <div style="display: flex; align-items: center; gap: 14px; min-height: 110px">
+              <svg width="48" height="48" viewBox="0 0 20 20" aria-hidden="true" style="flex: none">
+                <circle cx="10" cy="10" r="10" fill="var(--accent)"></circle>
+                <path d="M5.5 10.2 L8.7 13.2 L14.5 7" fill="none" stroke="#123524" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+              <div style="display: flex; flex-direction: column; gap: 4px">
+                <strong style="font-size: 18px; color: var(--green-dark)">Thank you! We have your details.</strong>
+                <span style="color: var(--text-muted); font-size: 14px">Our corporate catering manager will call you within 15 minutes with a custom proposal.</span>
+              </div>
+            </div>
+          </div>
+
+          <form id="heroForm" onsubmit="handleHeroSubmit(event)" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; align-items: end">
+            <div style="display: flex; flex-direction: column; gap: 5px">
+              <label for="h-type" style="font-size: 13px; font-weight: 700; color: var(--text-main)">I need</label>
+              <select class="field" id="h-type" name="type" style="cursor: pointer">
+                <option value="Daily office meals">Daily office meals</option>
+                <option value="Cafeteria management">Cafeteria management</option>
+                <option value="Event catering">Event catering</option>
+                <option value="High tea and snacks">High tea & snacks</option>
+              </select>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 5px">
+              <label for="h-count" style="font-size: 13px; font-weight: 700; color: var(--text-main)">Headcount</label>
+              <input class="field" id="h-count" name="count" type="number" min="10" placeholder="e.g. 80" required>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 5px">
+              <label for="h-phone" style="font-size: 13px; font-weight: 700; color: var(--text-main)">Work Phone</label>
+              <input class="field" id="h-phone" name="phone" type="tel" placeholder="Mobile / WhatsApp" required>
+            </div>
+            <button class="btn btn-accent" type="submit" style="min-height: 50px">Get My Quote</button>
+          </form>
+        </div>
+
+        <ul class="h-rise" style="animation-delay: 0.5s; list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px 26px; font-size: 14px; font-weight: 600; color: var(--green-dark)">
+          <li style="display: inline-flex; align-items: center; gap: 8px">
+            <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" style="flex: none"><circle cx="10" cy="10" r="10" fill="var(--accent)"></circle><path d="M5.5 10.2 L8.7 13.2 L14.5 7" fill="none" stroke="#123524" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            FSSAI-licensed central kitchen
+          </li>
+          <li style="display: inline-flex; align-items: center; gap: 8px">
+            <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" style="flex: none"><circle cx="10" cy="10" r="10" fill="var(--accent)"></circle><path d="M5.5 10.2 L8.7 13.2 L14.5 7" fill="none" stroke="#123524" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            Veg & non-veg cooked separately
+          </li>
+          <li style="display: inline-flex; align-items: center; gap: 8px">
+            <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" style="flex: none"><circle cx="10" cy="10" r="10" fill="var(--accent)"></circle><path d="M5.5 10.2 L8.7 13.2 L14.5 7" fill="none" stroke="#123524" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            Dedicated account manager
+          </li>
+        </ul>
+      </div>
+
+      <!-- HERO SLIDER -->
+      <div style="flex: 1 1 480px; min-width: 0; position: relative; padding: 0 0 28px 28px; box-sizing: border-box">
+        <div aria-hidden="true" style="position: absolute; left: 0; bottom: 0; width: 72%; height: 70%; border-radius: 24px; background: var(--green-dark)"></div>
+        <div class="h-wipe hero-slider-container" id="heroSlider" style="position: relative; height: 580px; border-radius: 24px; overflow: hidden; background: #E9E4D8; box-shadow: 0 24px 48px -18px rgba(18,53,36,0.3)">
+          
+          <!-- Slide Images -->
+          <div class="hero-slide" data-index="0" style="position: absolute; inset: 0; opacity: 1; transition: opacity 1.2s ease;">
+            <img src="${src('teamLunchOffice')}" alt="Colleagues sharing food at the office" style="width: 100%; height: 100%; object-fit: cover; transform: scale(1.05); transition: transform 6s ease-out">
+          </div>
+          <div class="hero-slide" data-index="1" style="position: absolute; inset: 0; opacity: 0; transition: opacity 1.2s ease;">
+            <img src="${src('festiveSadya')}" alt="Festive sadya on banana leaf with rice and curries" style="width: 100%; height: 100%; object-fit: cover; transform: scale(1); transition: transform 6s ease-out">
+          </div>
+          <div class="hero-slide" data-index="2" style="position: absolute; inset: 0; opacity: 0; transition: opacity 1.2s ease;">
+            <img src="${src('uniformedServer')}" alt="Staffed counters set up for corporate lunch" style="width: 100%; height: 100%; object-fit: cover; transform: scale(1); transition: transform 6s ease-out">
+          </div>
+          <div class="hero-slide" data-index="3" style="position: absolute; inset: 0; opacity: 0; transition: opacity 1.2s ease;">
+            <img src="${src('southIndianThali')}" alt="Boardroom South Indian thali lunch" style="width: 100%; height: 100%; object-fit: cover; transform: scale(1); transition: transform 6s ease-out">
+          </div>
+
+          <!-- Slide Caption & Dots Overlay -->
+          <div style="position: absolute; left: 16px; right: 16px; bottom: 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 18px; border-radius: 14px; background: rgba(255,255,255,.94); backdrop-filter: blur(8px); z-index: 10">
+            <span id="slideCaption" style="font-weight: 700; font-size: 15px; color: var(--green-dark)">Team lunch, served at your office</span>
+            <div role="group" aria-label="Hero photographs" style="display: inline-flex; align-items: center; gap: 4px">
+              <button type="button" class="slide-dot" onclick="setSlide(0)" aria-label="Slide 1" style="width: 32px; height: 32px; border: none; background: none; cursor: pointer; display: inline-flex; align-items: center; justify-content: center">
+                <span style="display: block; height: 6px; border-radius: 6px; width: 24px; background: var(--green-dark); transition: all 0.3s ease"></span>
+              </button>
+              <button type="button" class="slide-dot" onclick="setSlide(1)" aria-label="Slide 2" style="width: 32px; height: 32px; border: none; background: none; cursor: pointer; display: inline-flex; align-items: center; justify-content: center">
+                <span style="display: block; height: 6px; border-radius: 6px; width: 8px; background: rgba(18,53,36,.3); transition: all 0.3s ease"></span>
+              </button>
+              <button type="button" class="slide-dot" onclick="setSlide(2)" aria-label="Slide 3" style="width: 32px; height: 32px; border: none; background: none; cursor: pointer; display: inline-flex; align-items: center; justify-content: center">
+                <span style="display: block; height: 6px; border-radius: 6px; width: 8px; background: rgba(18,53,36,.3); transition: all 0.3s ease"></span>
+              </button>
+              <button type="button" class="slide-dot" onclick="setSlide(3)" aria-label="Slide 4" style="width: 32px; height: 32px; border: none; background: none; cursor: pointer; display: inline-flex; align-items: center; justify-content: center">
+                <span style="display: block; height: 6px; border-radius: 6px; width: 8px; background: rgba(18,53,36,.3); transition: all 0.3s ease"></span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: TRUSTED BY WORKPLACE TEAMS -->
+    <section aria-label="Clients" style="border-top: 1px solid rgba(18,53,36,.1); border-bottom: 1px solid rgba(18,53,36,.1); background: #FAF9F5">
+      <div style="max-width: 1280px; margin: 0 auto; padding: 32px 32px; display: flex; flex-wrap: wrap; align-items: center; gap: 20px 40px">
+        <span style="font-size: 14px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em">
+          Trusted by workplace teams at
+        </span>
+        <div style="flex: 1 1 600px; display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 16px; align-items: center">
+          <div style="display: flex; align-items: center; justify-content: center; height: 48px; border-radius: 10px; background: #FFFFFF; border: 1px solid rgba(18,53,36,.12); font-weight: 800; font-size: 16px; color: var(--green-dark); letter-spacing: -0.02em">
+            Razorpay
+          </div>
+          <div style="display: flex; align-items: center; justify-content: center; height: 48px; border-radius: 10px; background: #FFFFFF; border: 1px solid rgba(18,53,36,.12); font-weight: 800; font-size: 16px; color: var(--green-dark); letter-spacing: 0.05em">
+            CRED
+          </div>
+          <div style="display: flex; align-items: center; justify-content: center; height: 48px; border-radius: 10px; background: #FFFFFF; border: 1px solid rgba(18,53,36,.12); font-weight: 800; font-size: 16px; color: var(--green-dark); letter-spacing: -0.02em">
+            Swiggy HQ
+          </div>
+          <div style="display: flex; align-items: center; justify-content: center; height: 48px; border-radius: 10px; background: #FFFFFF; border: 1px solid rgba(18,53,36,.12); font-weight: 800; font-size: 16px; color: var(--green-dark); letter-spacing: -0.01em">
+            Zerodha
+          </div>
+          <div style="display: flex; align-items: center; justify-content: center; height: 48px; border-radius: 10px; background: #FFFFFF; border: 1px solid rgba(18,53,36,.12); font-weight: 800; font-size: 16px; color: var(--green-dark)">
+            Zoho Corp
+          </div>
+          <div style="display: flex; align-items: center; justify-content: center; height: 48px; border-radius: 10px; background: #FFFFFF; border: 1px solid rgba(18,53,36,.12); font-weight: 800; font-size: 16px; color: var(--green-dark); letter-spacing: 0.02em">
+            Infosys BPM
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: SOLUTIONS -->
+    <section id="solutions" style="max-width: 1280px; margin: 0 auto; padding: 100px 32px">
+      <div data-reveal style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 44px">
+        <div style="display: flex; flex-direction: column; gap: 14px; max-width: 660px">
+          <span style="display: inline-flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--green-dark)">
+            <span aria-hidden="true" style="display: inline-block; width: 28px; height: 3px; border-radius: 2px; background: var(--accent)"></span>
+            Our solutions
+          </span>
+          <h2 style="margin: 0; font-weight: 800; font-size: clamp(30px, 3.4vw, 46px); line-height: 1.12; letter-spacing: -0.025em; color: var(--green-dark)">
+            One food partner for everything your workplace eats.
+          </h2>
+        </div>
+        <p style="margin: 0; color: var(--text-muted); font-size: 16px; max-width: 380px">
+          From a meeting-room lunch to a full campus cafeteria, run by the same kitchen, strict hygiene standards, and the same dedicated team.
+        </p>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 28px">
+        <!-- Solution 1 -->
+        <article class="card" data-reveal style="border-radius: 18px; overflow: hidden; display: flex; flex-direction: column">
+          <div class="zoom" style="height: 230px">
+            <img src="${src('idliVadaBreakfast')}" alt="Steel tray of idli and vada with chutney, sambar and filter coffee" style="display: block; width: 100%; height: 100%; object-fit: cover">
+          </div>
+          <div style="padding: 26px; display: flex; flex-direction: column; gap: 12px; flex: 1">
+            <h3 style="margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.02em; color: var(--green-dark)">Daily meal programmes</h3>
+            <p style="margin: 0; color: var(--text-muted); font-size: 15px">Breakfast, lunch and evening snacks on a weekly rotating menu, boxed for each desk or served at a staffed counter.</p>
+            <a class="more" href="#enquire" style="margin-top: auto; padding-top: 12px">Enquire <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 8 H14 M9 3 L14 8 L9 13"></path></svg></a>
+          </div>
+        </article>
+
+        <!-- Solution 2 -->
+        <article class="card" data-reveal style="border-radius: 18px; overflow: hidden; display: flex; flex-direction: column">
+          <div class="zoom" style="height: 230px">
+            <img src="${src('officeCafeteria')}" alt="Bright office cafeteria with long tables and chairs" style="display: block; width: 100%; height: 100%; object-fit: cover">
+          </div>
+          <div style="padding: 26px; display: flex; flex-direction: column; gap: 12px; flex: 1">
+            <h3 style="margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.02em; color: var(--green-dark)">Cafeteria and pantry management</h3>
+            <p style="margin: 0; color: var(--text-muted); font-size: 15px">We run your cafeteria end to end: staff, menus, hygiene, hot-holding counters, pantry stocking and daily reporting.</p>
+            <a class="more" href="#enquire" style="margin-top: auto; padding-top: 12px">Enquire <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 8 H14 M9 3 L14 8 L9 13"></path></svg></a>
+          </div>
+        </article>
+
+        <!-- Solution 3 -->
+        <article class="card" data-reveal style="border-radius: 18px; overflow: hidden; display: flex; flex-direction: column">
+          <div class="zoom" style="height: 230px">
+            <img src="${src('southIndianThali')}" alt="South Indian thali with papad and bowls of curry on a table" style="display: block; width: 100%; height: 100%; object-fit: cover">
+          </div>
+          <div style="padding: 26px; display: flex; flex-direction: column; gap: 12px; flex: 1">
+            <h3 style="margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.02em; color: var(--green-dark)">Meetings and boardroom lunches</h3>
+            <p style="margin: 0; color: var(--text-muted); font-size: 15px">Plated authentic thalis and working executive lunches for client visits and leadership boardrooms, served discreetly.</p>
+            <a class="more" href="#enquire" style="margin-top: auto; padding-top: 12px">Enquire <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 8 H14 M9 3 L14 8 L9 13"></path></svg></a>
+          </div>
+        </article>
+
+        <!-- Solution 4 -->
+        <article class="card" data-reveal style="border-radius: 18px; overflow: hidden; display: flex; flex-direction: column">
+          <div class="zoom" style="height: 230px">
+            <img src="${src('corporateBuffet')}" alt="Guests in business wear at a long buffet table during a corporate event" style="display: block; width: 100%; height: 100%; object-fit: cover">
+          </div>
+          <div style="padding: 26px; display: flex; flex-direction: column; gap: 12px; flex: 1">
+            <h3 style="margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.02em; color: var(--green-dark)">Conferences and town halls</h3>
+            <p style="margin: 0; color: var(--text-muted); font-size: 15px">Breakfast, coffee breaks and hot lunch for large gatherings, timed precisely to your schedule so sessions start on the dot.</p>
+            <a class="more" href="#enquire" style="margin-top: auto; padding-top: 12px">Enquire <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 8 H14 M9 3 L14 8 L9 13"></path></svg></a>
+          </div>
+        </article>
+
+        <!-- Solution 5 -->
+        <article class="card" data-reveal style="border-radius: 18px; overflow: hidden; display: flex; flex-direction: column">
+          <div class="zoom" style="height: 230px">
+            <img src="${src('festiveSadya')}" alt="Sadya served on a banana leaf with rice, curries, pickles and payasam" style="display: block; width: 100%; height: 100%; object-fit: cover">
+          </div>
+          <div style="padding: 26px; display: flex; flex-direction: column; gap: 12px; flex: 1">
+            <h3 style="margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.02em; color: var(--green-dark)">Festive and celebration lunches</h3>
+            <p style="margin: 0; color: var(--text-muted); font-size: 15px">Grand Onam sadya, Ugadi, Pongal and Diwali spreads, traditional sweet boxes and annual-day celebrations on fresh banana leaves.</p>
+            <a class="more" href="#enquire" style="margin-top: auto; padding-top: 12px">Enquire <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 8 H14 M9 3 L14 8 L9 13"></path></svg></a>
+          </div>
+        </article>
+
+        <!-- Solution 6 -->
+        <article class="card" data-reveal style="border-radius: 18px; overflow: hidden; display: flex; flex-direction: column">
+          <div class="zoom" style="height: 230px">
+            <img src="${src('filterCoffee')}" alt="Filter coffee served in brass tumblers" style="display: block; width: 100%; height: 100%; object-fit: cover">
+          </div>
+          <div style="padding: 26px; display: flex; flex-direction: column; gap: 12px; flex: 1">
+            <h3 style="margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.02em; color: var(--green-dark)">High tea and live counters</h3>
+            <p style="margin: 0; color: var(--text-muted); font-size: 15px">Authentic degree filter coffee, live dosa and appam stations, chaats, evening savouries and warm sweets between meetings.</p>
+            <a class="more" href="#enquire" style="margin-top: auto; padding-top: 12px">Enquire <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 8 H14 M9 3 L14 8 L9 13"></path></svg></a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- SECTION 4: NUMBERS & STATS -->
+    <section class="on-dark" aria-label="Annam in numbers" style="background: var(--green-dark); color: #FFFFFF">
+      <div style="max-width: 1280px; margin: 0 auto; padding: 64px 32px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 32px">
+        <div data-reveal style="display: flex; flex-direction: column; gap: 6px">
+          <strong style="font-size: clamp(38px, 4vw, 54px); line-height: 1; letter-spacing: -0.03em; color: var(--accent)">150+</strong>
+          <span style="color: #C5D1C8; font-weight: 500">Corporate clients</span>
+        </div>
+        <div data-reveal style="display: flex; flex-direction: column; gap: 6px">
+          <strong style="font-size: clamp(38px, 4vw, 54px); line-height: 1; letter-spacing: -0.03em; color: var(--accent)">25,000+</strong>
+          <span style="color: #C5D1C8; font-weight: 500">Meals served daily</span>
+        </div>
+        <div data-reveal style="display: flex; flex-direction: column; gap: 6px">
+          <strong style="font-size: clamp(38px, 4vw, 54px); line-height: 1; letter-spacing: -0.03em; color: var(--accent)">99.4%</strong>
+          <span style="color: #C5D1C8; font-weight: 500">On-time delivery SLA</span>
+        </div>
+        <div data-reveal style="display: flex; flex-direction: column; gap: 6px">
+          <strong style="font-size: clamp(38px, 4vw, 54px); line-height: 1; letter-spacing: -0.03em; color: var(--accent)">4.8 / 5</strong>
+          <span style="color: #C5D1C8; font-weight: 500">Employee satisfaction</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: WHY ANNAM -->
+    <section id="why" style="max-width: 1280px; margin: 0 auto; padding: 100px 32px; display: flex; flex-wrap: wrap; gap: 64px; align-items: center">
+      <div data-reveal style="flex: 1 1 420px; min-width: 0">
+        <div class="zoom" style="height: 520px; border-radius: 24px; width: 100%; box-shadow: 0 24px 48px -20px rgba(18,53,36,0.3)">
+          <img src="${src('chefCooking')}" alt="Chef in whites tossing vegetables in a commercial kitchen" style="display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 24px">
+        </div>
+      </div>
+
+      <div style="flex: 1 1 520px; min-width: 0; display: flex; flex-direction: column; gap: 34px">
+        <div data-reveal style="display: flex; flex-direction: column; gap: 14px">
+          <span style="display: inline-flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--green-dark)">
+            <span aria-hidden="true" style="display: inline-block; width: 28px; height: 3px; border-radius: 2px; background: var(--accent)"></span>
+            Why Annam
+          </span>
+          <h2 style="margin: 0; font-weight: 800; font-size: clamp(30px, 3.4vw, 46px); line-height: 1.12; letter-spacing: -0.025em; color: var(--green-dark)">
+            Run like an operation, cooked like home.
+          </h2>
+          <p style="margin: 0; color: var(--text-muted); font-size: 16px">
+            Admin, People & HR teams partner with us because the food is exceptional and nothing else ever needs chasing.
+          </p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 28px 32px">
+          <div data-reveal style="display: flex; flex-direction: column; gap: 8px">
+            <span style="display: inline-flex; align-items: center; justify-content: center; width: 46px; height: 46px; border-radius: 12px; background: var(--green-dark)">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round"><path d="M12 3 L20 6 V12 C20 16.5 16.5 20 12 21 C7.5 20 4 16.5 4 12 V6 z"></path><path d="M8.5 12 L11 14.5 L15.5 9.5"></path></svg>
+            </span>
+            <h3 style="margin: 4px 0 0; font-size: 18px; font-weight: 700; color: var(--green-dark)">Food safety first</h3>
+            <p style="margin: 0; color: var(--text-muted); font-size: 15px">FSSAI Grade-A central kitchen, daily swab checks and insulated, temperature-logged vehicle dispatch.</p>
+          </div>
+
+          <div data-reveal style="display: flex; flex-direction: column; gap: 8px">
+            <span style="display: inline-flex; align-items: center; justify-content: center; width: 46px; height: 46px; border-radius: 12px; background: var(--green-dark)">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7 V12 L15.5 14"></path></svg>
+            </span>
+            <h3 style="margin: 4px 0 0; font-size: 18px; font-weight: 700; color: var(--green-dark)">On time, every time</h3>
+            <p style="margin: 0; color: var(--text-muted); font-size: 15px">Guaranteed delivery windows written into your SLA contract with real-time dispatch alerts to your desk.</p>
+          </div>
+
+          <div data-reveal style="display: flex; flex-direction: column; gap: 8px">
+            <span style="display: inline-flex; align-items: center; justify-content: center; width: 46px; height: 46px; border-radius: 12px; background: var(--green-dark)">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round"><path d="M4 6 H20 M4 12 H20 M4 18 H13"></path><path d="M17 16 V21 M14.5 18.5 H19.5"></path></svg>
+            </span>
+            <h3 style="margin: 4px 0 0; font-size: 18px; font-weight: 700; color: var(--green-dark)">Menus people never tire of</h3>
+            <p style="margin: 0; color: var(--text-muted); font-size: 15px">Weekly rotating recipes across Tamil, Telugu, Kannada and Kerala cuisines, with employee taste feedback loops.</p>
+          </div>
+
+          <div data-reveal style="display: flex; flex-direction: column; gap: 8px">
+            <span style="display: inline-flex; align-items: center; justify-content: center; width: 46px; height: 46px; border-radius: 12px; background: var(--green-dark)">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="3.6"></circle><path d="M4.5 20 C4.5 15.8 7.8 13.6 12 13.6 C16.2 13.6 19.5 15.8 19.5 20"></path></svg>
+            </span>
+            <h3 style="margin: 4px 0 0; font-size: 18px; font-weight: 700; color: var(--green-dark)">One account manager</h3>
+            <p style="margin: 0; color: var(--text-muted); font-size: 15px">A direct point of contact on WhatsApp and phone for headcount adjustments, VIP visits and special requests.</p>
+          </div>
+
+          <div data-reveal style="display: flex; flex-direction: column; gap: 8px">
+            <span style="display: inline-flex; align-items: center; justify-content: center; width: 46px; height: 46px; border-radius: 12px; background: var(--green-dark)">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round"><rect x="5" y="3" width="14" height="18" rx="2"></rect><path d="M9 8 H15 M9 12 H15 M9 16 H12"></path></svg>
+            </span>
+            <h3 style="margin: 4px 0 0; font-size: 18px; font-weight: 700; color: var(--green-dark)">Clear transparent billing</h3>
+            <p style="margin: 0; color: var(--text-muted); font-size: 15px">Predictable per-person pricing, one consolidated monthly GST invoice and zero surprise surcharges.</p>
+          </div>
+
+          <div data-reveal style="display: flex; flex-direction: column; gap: 8px">
+            <span style="display: inline-flex; align-items: center; justify-content: center; width: 46px; height: 46px; border-radius: 12px; background: var(--green-dark)">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round"><path d="M4 20 V10 M10 20 V4 M16 20 V13 M22 20 H2"></path></svg>
+            </span>
+            <h3 style="margin: 4px 0 0; font-size: 18px; font-weight: 700; color: var(--green-dark)">Built to scale</h3>
+            <p style="margin: 0; color: var(--text-muted); font-size: 15px">The same homestyle standard whether feeding a team of 30 or a multi-floor campus of 3,000 across multiple sites.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 6: HOW IT WORKS -->
+    <section id="process" style="background: var(--bg-cream)">
+      <div style="max-width: 1280px; margin: 0 auto; padding: 100px 32px">
+        <div data-reveal style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 14px; max-width: 680px; margin: 0 auto 52px">
+          <span style="display: inline-flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--green-dark)">
+            <span aria-hidden="true" style="display: inline-block; width: 28px; height: 3px; border-radius: 2px; background: var(--accent)"></span>
+            How it works
+          </span>
+          <h2 style="margin: 0; font-weight: 800; font-size: clamp(30px, 3.4vw, 46px); line-height: 1.12; letter-spacing: -0.025em; color: var(--green-dark)">
+            Live in four simple steps.
+          </h2>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px">
+          <div class="card" data-reveal style="border-radius: 18px; padding: 30px; display: flex; flex-direction: column; gap: 14px">
+            <span style="display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; background: var(--accent); color: var(--green-dark); font-weight: 800; font-size: 18px">1</span>
+            <h3 style="margin: 4px 0 0; font-size: 20px; font-weight: 800; letter-spacing: -0.02em; color: var(--green-dark)">Share requirement</h3>
+            <p style="margin: 0; color: var(--text-muted); font-size: 15px">Tell us your team headcount, office location, meal timings and budget. We reply within 30 minutes with sample menus.</p>
+          </div>
+
+          <div class="card" data-reveal style="border-radius: 18px; padding: 30px; display: flex; flex-direction: column; gap: 14px">
+            <span style="display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; background: var(--accent); color: var(--green-dark); font-weight: 800; font-size: 18px">2</span>
+            <h3 style="margin: 4px 0 0; font-size: 20px; font-weight: 800; letter-spacing: -0.02em; color: var(--green-dark)">Taste and finalise</h3>
+            <p style="margin: 0; color: var(--text-muted); font-size: 15px">We bring a complimentary tasting lunch directly to your boardroom for your leadership & admin teams to evaluate.</p>
+          </div>
+
+          <div class="card" data-reveal style="border-radius: 18px; padding: 30px; display: flex; flex-direction: column; gap: 14px">
+            <span style="display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; background: var(--accent); color: var(--green-dark); font-weight: 800; font-size: 18px">3</span>
+            <h3 style="margin: 4px 0 0; font-size: 20px; font-weight: 800; letter-spacing: -0.02em; color: var(--green-dark)">We go live</h3>
+            <p style="margin: 0; color: var(--text-muted); font-size: 15px">Our trained crew sets up the buffet counter or delivers sealed hot-boxes at the designated hour, right from day one.</p>
+          </div>
+
+          <div class="card" data-reveal style="border-radius: 18px; padding: 30px; display: flex; flex-direction: column; gap: 14px">
+            <span style="display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; background: var(--accent); color: var(--green-dark); font-weight: 800; font-size: 18px">4</span>
+            <h3 style="margin: 4px 0 0; font-size: 20px; font-weight: 800; letter-spacing: -0.02em; color: var(--green-dark)">Review every month</h3>
+            <p style="margin: 0; color: var(--text-muted); font-size: 15px">Feedback ratings, headcount adjustments and seasonal menus are reviewed monthly with your account lead.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 7: INTERACTIVE ROTATING MENUS -->
+    <section id="menus" style="max-width: 1280px; margin: 0 auto; padding: 100px 32px">
+      <div data-reveal style="display: flex; flex-direction: column; gap: 14px; max-width: 680px; margin-bottom: 32px">
+        <span style="display: inline-flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--green-dark)">
+          <span aria-hidden="true" style="display: inline-block; width: 28px; height: 3px; border-radius: 2px; background: var(--accent)"></span>
+          Sample menus
+        </span>
+        <h2 style="margin: 0; font-weight: 800; font-size: clamp(30px, 3.4vw, 46px); line-height: 1.12; letter-spacing: -0.025em; color: var(--green-dark)">
+          Authentic South Indian menus, rotated every week.
+        </h2>
+      </div>
+
+      <!-- TABS -->
+      <div data-reveal role="tablist" aria-label="Menu Tabs" style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 40px">
+        <button type="button" class="menu-tab-btn active" onclick="switchMenu('tiffin', this)" style="min-height: 46px; padding: 0 22px; border-radius: 999px; border: 1.5px solid var(--green-dark); font: 700 15px var(--font-family); cursor: pointer; transition: all .2s ease; background: var(--green-dark); color: #FFFFFF">
+          Tiffin & breakfast
+        </button>
+        <button type="button" class="menu-tab-btn" onclick="switchMenu('meals', this)" style="min-height: 46px; padding: 0 22px; border-radius: 999px; border: 1.5px solid var(--green-dark); font: 700 15px var(--font-family); cursor: pointer; transition: all .2s ease; background: #FFFFFF; color: var(--green-dark)">
+          Daily meals
+        </button>
+        <button type="button" class="menu-tab-btn" onclick="switchMenu('events', this)" style="min-height: 46px; padding: 0 22px; border-radius: 999px; border: 1.5px solid var(--green-dark); font: 700 15px var(--font-family); cursor: pointer; transition: all .2s ease; background: #FFFFFF; color: var(--green-dark)">
+          Events & biryani
+        </button>
+        <button type="button" class="menu-tab-btn" onclick="switchMenu('sweets', this)" style="min-height: 46px; padding: 0 22px; border-radius: 999px; border: 1.5px solid var(--green-dark); font: 700 15px var(--font-family); cursor: pointer; transition: all .2s ease; background: #FFFFFF; color: var(--green-dark)">
+          Sweets & high tea
+        </button>
+      </div>
+
+      <!-- TAB CONTENT CONTAINER -->
+      <div id="menuDisplayContainer" class="menu-fade" style="display: flex; flex-wrap: wrap; gap: 48px; align-items: stretch">
+        <!-- Photo on left -->
+        <div class="zoom" style="flex: 1 1 380px; min-width: 0; min-height: 460px; border-radius: 24px; position: relative; box-shadow: 0 20px 40px -20px rgba(18,53,36,0.25)">
+          <img id="menuDisplayImg" src="${src('idliVadaBreakfast')}" alt="Idlis on a banana leaf with sambar and chutney" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 24px">
+        </div>
+
+        <!-- Groups on right -->
+        <div style="flex: 1.3 1 480px; min-width: 0; display: flex; flex-direction: column; gap: 26px; justify-content: center">
+          <div id="menuGroupsContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 26px 32px">
+            <!-- Injected dynamically via JS -->
+          </div>
+
+          <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding-top: 24px; border-top: 1px solid rgba(18,53,36,.14)">
+            <span style="font-size: 14px; font-weight: 600; color: var(--text-muted)">
+              <span style="display: inline-block; padding: 2px 8px; border-radius: 4px; background: #E8F5E9; color: #2E7D32; font-size: 12px; margin-right: 6px">v</span> Vegetarian
+              <span style="display: inline-block; padding: 2px 8px; border-radius: 4px; background: #FFF3E0; color: #E65100; font-size: 12px; margin-left: 12px; margin-right: 6px">vg</span> Vegan. Jain & no onion-garlic on request.
+            </span>
+            <a class="btn btn-line" href="#enquire">Request the full menu</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 8: PLANS & PRICING -->
+    <section id="plans" style="background: var(--bg-cream)">
+      <div style="max-width: 1280px; margin: 0 auto; padding: 100px 32px">
+        <div data-reveal style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 14px; max-width: 680px; margin: 0 auto 52px">
+          <span style="display: inline-flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--green-dark)">
+            <span aria-hidden="true" style="display: inline-block; width: 28px; height: 3px; border-radius: 2px; background: var(--accent)"></span>
+            Plans & Pricing
+          </span>
+          <h2 style="margin: 0; font-weight: 800; font-size: clamp(30px, 3.4vw, 46px); line-height: 1.12; letter-spacing: -0.025em; color: var(--green-dark)">
+            Simple per-person pricing.
+          </h2>
+          <p style="margin: 0; color: var(--text-muted); font-size: 16px">
+            Indicative starting prices. Your exact quote depends on headcount, chosen menu rotation and service style.
+          </p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 28px; align-items: stretch">
+          <!-- Tier 1 -->
+          <article class="card" data-reveal style="border-radius: 18px; padding: 36px; display: flex; flex-direction: column; gap: 20px">
+            <div style="display: flex; flex-direction: column; gap: 4px">
+              <h3 style="margin: 0; font-size: 24px; font-weight: 800; color: var(--green-dark)">Tiffin</h3>
+              <span style="color: var(--text-muted); font-size: 15px">Breakfast & evening snacks</span>
+            </div>
+            <p style="margin: 0; font-size: 15px; color: var(--text-muted)">
+              From <strong style="font-size: 36px; letter-spacing: -0.03em; color: var(--green-dark)">₹110</strong> per person
+            </p>
+            <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; font-size: 15px">
+              <li style="display: flex; gap: 10px; align-items: flex-start">
+                <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" style="flex: none; margin-top: 2px"><circle cx="10" cy="10" r="10" fill="var(--accent)"></circle><path d="M5.5 10.2 L8.7 13.2 L14.5 7" fill="none" stroke="#123524" stroke-width="2" stroke-linecap="round"></path></svg>
+                Two tiffin items with chutneys & sambar
+              </li>
+              <li style="display: flex; gap: 10px; align-items: flex-start">
+                <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" style="flex: none; margin-top: 2px"><circle cx="10" cy="10" r="10" fill="var(--accent)"></circle><path d="M5.5 10.2 L8.7 13.2 L14.5 7" fill="none" stroke="#123524" stroke-width="2" stroke-linecap="round"></path></svg>
+                Degree filter coffee or masala chai
+              </li>
+              <li style="display: flex; gap: 10px; align-items: flex-start">
+                <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" style="flex: none; margin-top: 2px"><circle cx="10" cy="10" r="10" fill="var(--accent)"></circle><path d="M5.5 10.2 L8.7 13.2 L14.5 7" fill="none" stroke="#123524" stroke-width="2" stroke-linecap="round"></path></svg>
+                Weekly rotating homestyle menu
+              </li>
+              <li style="display: flex; gap: 10px; align-items: flex-start">
+                <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" style="flex: none; margin-top: 2px"><circle cx="10" cy="10" r="10" fill="var(--accent)"></circle><path d="M5.5 10.2 L8.7 13.2 L14.5 7" fill="none" stroke="#123524" stroke-width="2" stroke-linecap="round"></path></svg>
+                Biodegradable meal boxes or counter service
+              </li>
+            </ul>
+            <a class="btn btn-line" href="#enquire" onclick="prefillService('Tiffin Programme')" style="margin-top: auto">Get a Quote</a>
+          </article>
+
+          <!-- Tier 2 (Highlighted) -->
+          <article class="card on-dark" data-reveal style="position: relative; background: var(--green-dark); color: #FFFFFF; border: 2px solid var(--accent); border-radius: 18px; padding: 36px; display: flex; flex-direction: column; gap: 20px; box-shadow: 0 25px 50px -20px rgba(18,53,36,0.6)">
+            <span style="position: absolute; top: 20px; right: 20px; padding: 6px 14px; border-radius: 999px; background: var(--accent); color: var(--green-dark); font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em">
+              Most chosen
+            </span>
+            <div style="display: flex; flex-direction: column; gap: 4px">
+              <h3 style="margin: 0; font-size: 24px; font-weight: 800; color: #FFFFFF">Meals</h3>
+              <span style="color: #C5D1C8; font-size: 15px">Daily lunch programme</span>
+            </div>
+            <p style="margin: 0; font-size: 15px; color: #C5D1C8">
+              From <strong style="font-size: 36px; letter-spacing: -0.03em; color: #FFFFFF">₹160</strong> per person
+            </p>
+            <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; font-size: 15px">
+              <li style="display: flex; gap: 10px; align-items: flex-start">
+                <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" style="flex: none; margin-top: 2px"><circle cx="10" cy="10" r="10" fill="var(--accent)"></circle><path d="M5.5 10.2 L8.7 13.2 L14.5 7" fill="none" stroke="#123524" stroke-width="2" stroke-linecap="round"></path></svg>
+                Rice, sambar, rasam, 2 poriyals, curd & appalam
+              </li>
+              <li style="display: flex; gap: 10px; align-items: flex-start">
+                <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" style="flex: none; margin-top: 2px"><circle cx="10" cy="10" r="10" fill="var(--accent)"></circle><path d="M5.5 10.2 L8.7 13.2 L14.5 7" fill="none" stroke="#123524" stroke-width="2" stroke-linecap="round"></path></svg>
+                Separate vegetarian and non-veg options
+              </li>
+              <li style="display: flex; gap: 10px; align-items: flex-start">
+                <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" style="flex: none; margin-top: 2px"><circle cx="10" cy="10" r="10" fill="var(--accent)"></circle><path d="M5.5 10.2 L8.7 13.2 L14.5 7" fill="none" stroke="#123524" stroke-width="2" stroke-linecap="round"></path></svg>
+                Staffed chafing counter or executive meal boxes
+              </li>
+              <li style="display: flex; gap: 10px; align-items: flex-start">
+                <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" style="flex: none; margin-top: 2px"><circle cx="10" cy="10" r="10" fill="var(--accent)"></circle><path d="M5.5 10.2 L8.7 13.2 L14.5 7" fill="none" stroke="#123524" stroke-width="2" stroke-linecap="round"></path></svg>
+                Dedicated account lead & consolidated monthly GST bill
+              </li>
+            </ul>
+            <a class="btn btn-accent" href="#enquire" onclick="prefillService('Daily Meal Programme')" style="margin-top: auto">Get a Quote</a>
+          </article>
+
+          <!-- Tier 3 -->
+          <article class="card" data-reveal style="border-radius: 18px; padding: 36px; display: flex; flex-direction: column; gap: 20px">
+            <div style="display: flex; flex-direction: column; gap: 4px">
+              <h3 style="margin: 0; font-size: 24px; font-weight: 800; color: var(--green-dark)">Signature</h3>
+              <span style="color: var(--text-muted); font-size: 15px">Events and celebrations</span>
+            </div>
+            <p style="margin: 0; font-size: 15px; color: var(--text-muted)">
+              From <strong style="font-size: 36px; letter-spacing: -0.03em; color: var(--green-dark)">₹290</strong> per guest
+            </p>
+            <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; font-size: 15px">
+              <li style="display: flex; gap: 10px; align-items: flex-start">
+                <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" style="flex: none; margin-top: 2px"><circle cx="10" cy="10" r="10" fill="var(--accent)"></circle><path d="M5.5 10.2 L8.7 13.2 L14.5 7" fill="none" stroke="#123524" stroke-width="2" stroke-linecap="round"></path></svg>
+                Traditional banana-leaf service or lavish buffet
+              </li>
+              <li style="display: flex; gap: 10px; align-items: flex-start">
+                <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" style="flex: none; margin-top: 2px"><circle cx="10" cy="10" r="10" fill="var(--accent)"></circle><path d="M5.5 10.2 L8.7 13.2 L14.5 7" fill="none" stroke="#123524" stroke-width="2" stroke-linecap="round"></path></svg>
+                Live dosa, appam & degree filter coffee counters
+              </li>
+              <li style="display: flex; gap: 10px; align-items: flex-start">
+                <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" style="flex: none; margin-top: 2px"><circle cx="10" cy="10" r="10" fill="var(--accent)"></circle><path d="M5.5 10.2 L8.7 13.2 L14.5 7" fill="none" stroke="#123524" stroke-width="2" stroke-linecap="round"></path></svg>
+                Full service crew with an on-site banquet supervisor
+              </li>
+              <li style="display: flex; gap: 10px; align-items: flex-start">
+                <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" style="flex: none; margin-top: 2px"><circle cx="10" cy="10" r="10" fill="var(--accent)"></circle><path d="M5.5 10.2 L8.7 13.2 L14.5 7" fill="none" stroke="#123524" stroke-width="2" stroke-linecap="round"></path></svg>
+                Setup, clear-down & complimentary tasting beforehand
+              </li>
+            </ul>
+            <a class="btn btn-line" href="#enquire" onclick="prefillService('Signature Event')" style="margin-top: auto">Get a Quote</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 9: KITCHEN VIDEO -->
+    <section id="kitchen" class="on-dark" style="background: var(--green-dark); color: #FFFFFF">
+      <div style="max-width: 1280px; margin: 0 auto; padding: 100px 32px; display: flex; flex-wrap: wrap; gap: 56px; align-items: center">
+        <div data-reveal style="flex: 1.3 1 480px; min-width: 0; position: relative; aspect-ratio: 16 / 9; border-radius: 24px; overflow: hidden; background: #0B2216; box-shadow: 0 30px 60px -30px rgba(0,0,0,0.8)">
+          <video id="kitchenVideo" src="${src('videoDosa')}" poster="${src('videoPoster')}" preload="metadata" playsinline muted loop aria-label="Dosa batter being spread on a hot griddle in central kitchen" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover"></video>
+          
+          <!-- Video Controls Overlay -->
+          <div style="position: absolute; left: 16px; bottom: 16px; display: flex; align-items: center; gap: 10px; z-index: 5">
+            <button type="button" id="videoPlayBtn" onclick="toggleKitchenVideo()" style="min-height: 42px; padding: 0 18px; border-radius: 999px; border: none; background: rgba(255,255,255,.94); color: var(--green-dark); font: 700 14px var(--font-family); cursor: pointer; display: inline-flex; align-items: center; gap: 8px">
+              <svg id="playIcon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+              <span id="videoLabel">Play film</span>
+            </button>
+            <button type="button" id="videoMuteBtn" onclick="toggleKitchenAudio()" style="min-height: 42px; width: 42px; border-radius: 50%; border: none; background: rgba(255,255,255,.94); color: var(--green-dark); cursor: pointer; display: inline-flex; align-items: center; justify-content: center" aria-label="Toggle Sound">
+              <svg id="muteIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+            </button>
+          </div>
+        </div>
+
+        <div data-reveal style="flex: 1 1 400px; min-width: 0; display: flex; flex-direction: column; gap: 22px">
+          <span style="display: inline-flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase">
+            <span aria-hidden="true" style="display: inline-block; width: 28px; height: 3px; border-radius: 2px; background: var(--accent)"></span>
+            Kitchen and food safety
+          </span>
+          <h2 style="margin: 0; font-weight: 800; font-size: clamp(30px, 3.4vw, 46px); line-height: 1.12; letter-spacing: -0.025em">
+            Our own kitchen. Our own people. Audited every day.
+          </h2>
+          <p style="margin: 0; color: #C5D1C8; font-size: 16px">
+            Batters are stone-ground overnight and spice masalas are roasted in-house. Every batch is tasted by our executive chef, temperature-logged, and sealed before leaving for your workplace.
+          </p>
+          <div style="display: flex; flex-wrap: wrap; gap: 10px">
+            <span style="padding: 8px 16px; border-radius: 999px; border: 1px solid rgba(255,255,255,.35); font-size: 14px; font-weight: 600">FSSAI Lic. 11223334000123</span>
+            <span style="padding: 8px 16px; border-radius: 999px; border: 1px solid rgba(255,255,255,.35); font-size: 14px; font-weight: 600">ISO 22000 Certified</span>
+            <span style="padding: 8px 16px; border-radius: 999px; border: 1px solid rgba(255,255,255,.35); font-size: 14px; font-weight: 600">Daily 42-point hygiene checklist</span>
+            <span style="padding: 8px 16px; border-radius: 999px; border: 1px solid rgba(255,255,255,.35); font-size: 14px; font-weight: 600">Insulated hot-chain dispatch</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 10: INDUSTRIES -->
+    <section id="industries" style="max-width: 1280px; margin: 0 auto; padding: 100px 32px 60px">
+      <div data-reveal style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 28px 56px">
+        <div style="flex: 1 1 360px; min-width: 0; display: flex; flex-direction: column; gap: 14px">
+          <span style="display: inline-flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--green-dark)">
+            <span aria-hidden="true" style="display: inline-block; width: 28px; height: 3px; border-radius: 2px; background: var(--accent)"></span>
+            Who we serve
+          </span>
+          <h2 style="margin: 0; font-weight: 800; font-size: clamp(30px, 3.4vw, 46px); line-height: 1.12; letter-spacing: -0.025em; color: var(--green-dark)">
+            Built for workplaces of every size.
+          </h2>
+        </div>
+        <ul style="flex: 1.4 1 480px; min-width: 0; list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 12px">
+          <li style="padding: 12px 22px; border-radius: 999px; background: var(--bg-cream); font-weight: 700; color: var(--green-dark)">IT & Tech Parks</li>
+          <li style="padding: 12px 22px; border-radius: 999px; background: var(--bg-cream); font-weight: 700; color: var(--green-dark)">Coworking Spaces</li>
+          <li style="padding: 12px 22px; border-radius: 999px; background: var(--bg-cream); font-weight: 700; color: var(--green-dark)">BFSI & Fintech HQs</li>
+          <li style="padding: 12px 22px; border-radius: 999px; background: var(--bg-cream); font-weight: 700; color: var(--green-dark)">Global Capability Centres (GCCs)</li>
+          <li style="padding: 12px 22px; border-radius: 999px; background: var(--bg-cream); font-weight: 700; color: var(--green-dark)">Campuses & R&D Labs</li>
+          <li style="padding: 12px 22px; border-radius: 999px; background: var(--bg-cream); font-weight: 700; color: var(--green-dark)">High-Growth Startups</li>
+          <li style="padding: 12px 22px; border-radius: 999px; background: var(--bg-cream); font-weight: 700; color: var(--green-dark)">Conferences & Summit Venues</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- SECTION 11: INFINITE MARQUEE GALLERY -->
+    <section id="gallery" style="padding: 20px 0 100px">
+      <div class="strip">
+        <div class="strip-track">
+          <!-- Item 1 -->
+          <figure style="margin: 0; width: 440px; display: flex; flex-direction: column; gap: 10px">
+            <img src="${src('teamLunchOffice')}" alt="Colleagues standing around a table sharing food at the office" style="display: block; width: 100%; height: 320px; object-fit: cover; border-radius: 18px">
+            <figcaption style="font-size: 14px; font-weight: 600; color: var(--text-muted)">Team lunch at a Bangalore tech office</figcaption>
+          </figure>
+          <!-- Item 2 -->
+          <figure style="margin: 0; width: 320px; display: flex; flex-direction: column; gap: 10px">
+            <img src="${src('chafingDishes')}" alt="Polished chafing dishes lined up on a buffet" style="display: block; width: 100%; height: 320px; object-fit: cover; border-radius: 18px">
+            <figcaption style="font-size: 14px; font-weight: 600; color: var(--text-muted)">Hot buffet counter setup</figcaption>
+          </figure>
+          <!-- Item 3 -->
+          <figure style="margin: 0; width: 440px; display: flex; flex-direction: column; gap: 10px">
+            <img src="${src('kitchenChefs')}" alt="Chefs in whites working at the range in a commercial kitchen" style="display: block; width: 100%; height: 320px; object-fit: cover; border-radius: 18px">
+            <figcaption style="font-size: 14px; font-weight: 600; color: var(--text-muted)">Our central kitchen team in full flow</figcaption>
+          </figure>
+          <!-- Item 4 -->
+          <figure style="margin: 0; width: 320px; display: flex; flex-direction: column; gap: 10px">
+            <img src="${src('festiveSadya')}" alt="Sadya served on a banana leaf" style="display: block; width: 100%; height: 320px; object-fit: cover; border-radius: 18px">
+            <figcaption style="font-size: 14px; font-weight: 600; color: var(--text-muted)">Festive Onam sadya on the banana leaf</figcaption>
+          </figure>
+          <!-- Item 5 -->
+          <figure style="margin: 0; width: 440px; display: flex; flex-direction: column; gap: 10px">
+            <img src="${src('curryChafing')}" alt="Curry held hot in a chafing dish beside stacked plates" style="display: block; width: 100%; height: 320px; object-fit: cover; border-radius: 18px">
+            <figcaption style="font-size: 14px; font-weight: 600; color: var(--text-muted)">Fresh curries replenished continually</figcaption>
+          </figure>
+          <!-- Item 6 -->
+          <figure style="margin: 0; width: 300px; display: flex; flex-direction: column; gap: 10px">
+            <img src="${src('dumBiryani')}" alt="Dum biryani topped with a papad in a clay pot" style="display: block; width: 100%; height: 320px; object-fit: cover; border-radius: 18px">
+            <figcaption style="font-size: 14px; font-weight: 600; color: var(--text-muted)">Clay pot dum biryani lunch</figcaption>
+          </figure>
+          <!-- Item 7 -->
+          <figure style="margin: 0; width: 440px; display: flex; flex-direction: column; gap: 10px">
+            <img src="${src('banquetHall')}" alt="Banquet hall with chandeliers and rows of seating" style="display: block; width: 100%; height: 320px; object-fit: cover; border-radius: 18px">
+            <figcaption style="font-size: 14px; font-weight: 600; color: var(--text-muted)">Annual summit banquet setup</figcaption>
+          </figure>
+          <!-- Item 8 -->
+          <figure style="margin: 0; width: 320px; display: flex; flex-direction: column; gap: 10px">
+            <img src="${src('townhallSpeaker')}" alt="Speaker presenting to a seated audience at a company event" style="display: block; width: 100%; height: 320px; object-fit: cover; border-radius: 18px">
+            <figcaption style="font-size: 14px; font-weight: 600; color: var(--text-muted)">Company town hall and catered lunch</figcaption>
+          </figure>
+          <!-- Item 9 -->
+          <figure style="margin: 0; width: 320px; display: flex; flex-direction: column; gap: 10px">
+            <img src="${src('appamSweets')}" alt="Appam with egg curry and sweets on a banana leaf" style="display: block; width: 100%; height: 320px; object-fit: cover; border-radius: 18px">
+            <figcaption style="font-size: 14px; font-weight: 600; color: var(--text-muted)">Live appam counter & sweets</figcaption>
+          </figure>
+
+          <!-- DUPLICATE SET FOR INFINITE SCROLL -->
+          <figure style="margin: 0; width: 440px; display: flex; flex-direction: column; gap: 10px">
+            <img src="${src('teamLunchOffice')}" alt="" style="display: block; width: 100%; height: 320px; object-fit: cover; border-radius: 18px">
+            <figcaption style="font-size: 14px; font-weight: 600; color: var(--text-muted)">Team lunch at a Bangalore tech office</figcaption>
+          </figure>
+          <figure style="margin: 0; width: 320px; display: flex; flex-direction: column; gap: 10px">
+            <img src="${src('chafingDishes')}" alt="" style="display: block; width: 100%; height: 320px; object-fit: cover; border-radius: 18px">
+            <figcaption style="font-size: 14px; font-weight: 600; color: var(--text-muted)">Hot buffet counter setup</figcaption>
+          </figure>
+          <figure style="margin: 0; width: 440px; display: flex; flex-direction: column; gap: 10px">
+            <img src="${src('kitchenChefs')}" alt="" style="display: block; width: 100%; height: 320px; object-fit: cover; border-radius: 18px">
+            <figcaption style="font-size: 14px; font-weight: 600; color: var(--text-muted)">Our central kitchen team in full flow</figcaption>
+          </figure>
+          <figure style="margin: 0; width: 320px; display: flex; flex-direction: column; gap: 10px">
+            <img src="${src('festiveSadya')}" alt="" style="display: block; width: 100%; height: 320px; object-fit: cover; border-radius: 18px">
+            <figcaption style="font-size: 14px; font-weight: 600; color: var(--text-muted)">Festive Onam sadya on the banana leaf</figcaption>
+          </figure>
+          <figure style="margin: 0; width: 440px; display: flex; flex-direction: column; gap: 10px">
+            <img src="${src('curryChafing')}" alt="" style="display: block; width: 100%; height: 320px; object-fit: cover; border-radius: 18px">
+            <figcaption style="font-size: 14px; font-weight: 600; color: var(--text-muted)">Fresh curries replenished continually</figcaption>
+          </figure>
+          <figure style="margin: 0; width: 300px; display: flex; flex-direction: column; gap: 10px">
+            <img src="${src('dumBiryani')}" alt="" style="display: block; width: 100%; height: 320px; object-fit: cover; border-radius: 18px">
+            <figcaption style="font-size: 14px; font-weight: 600; color: var(--text-muted)">Clay pot dum biryani lunch</figcaption>
+          </figure>
+          <figure style="margin: 0; width: 440px; display: flex; flex-direction: column; gap: 10px">
+            <img src="${src('banquetHall')}" alt="" style="display: block; width: 100%; height: 320px; object-fit: cover; border-radius: 18px">
+            <figcaption style="font-size: 14px; font-weight: 600; color: var(--text-muted)">Annual summit banquet setup</figcaption>
+          </figure>
+          <figure style="margin: 0; width: 320px; display: flex; flex-direction: column; gap: 10px">
+            <img src="${src('townhallSpeaker')}" alt="" style="display: block; width: 100%; height: 320px; object-fit: cover; border-radius: 18px">
+            <figcaption style="font-size: 14px; font-weight: 600; color: var(--text-muted)">Company town hall and catered lunch</figcaption>
+          </figure>
+          <figure style="margin: 0; width: 320px; display: flex; flex-direction: column; gap: 10px">
+            <img src="${src('appamSweets')}" alt="" style="display: block; width: 100%; height: 320px; object-fit: cover; border-radius: 18px">
+            <figcaption style="font-size: 14px; font-weight: 600; color: var(--text-muted)">Live appam counter & sweets</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 12: CLIENT STORIES -->
+    <section id="clients" style="background: var(--bg-cream)">
+      <div style="max-width: 1280px; margin: 0 auto; padding: 100px 32px">
+        <div data-reveal style="display: flex; flex-direction: column; gap: 14px; max-width: 680px; margin-bottom: 44px">
+          <span style="display: inline-flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--green-dark)">
+            <span aria-hidden="true" style="display: inline-block; width: 28px; height: 3px; border-radius: 2px; background: var(--accent)"></span>
+            Client stories
+          </span>
+          <h2 style="margin: 0; font-weight: 800; font-size: clamp(30px, 3.4vw, 46px); line-height: 1.12; letter-spacing: -0.025em; color: var(--green-dark)">
+            What admin and HR teams say.
+          </h2>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 28px">
+          <!-- Review 1 -->
+          <figure class="card" data-reveal style="margin: 0; border-radius: 18px; padding: 32px; display: flex; flex-direction: column; gap: 18px">
+            <svg width="34" height="26" viewBox="0 0 34 26" aria-hidden="true">
+              <path d="M0 26 V14 C0 6 5 1 13 0 V6 C9 7 7 9 7 13 H13 V26 z M20 26 V14 C20 6 25 1 33 0 V6 C29 7 27 9 27 13 H33 V26 z" fill="var(--accent)"></path>
+            </svg>
+            <blockquote style="margin: 0; font-size: 17px; font-weight: 500; line-height: 1.55; color: var(--text-main)">
+              "The difference in team energy since switching to Annam's daily lunch programme is remarkable. The filter coffee and sambar taste genuinely homemade, and lunch arrives at 12:45 sharp every single day without exception."
+            </blockquote>
+            <figcaption style="margin-top: auto; padding-top: 18px; border-top: 1px solid rgba(18,53,36,.12); display: flex; flex-direction: column; gap: 3px">
+              <strong style="color: var(--green-dark); font-size: 16px">Priya Ramanathan, Workplace Experience Lead</strong>
+              <span style="font-size: 14px; color: var(--text-muted)">Razorpay · Daily Lunch Programme (350 meals/day)</span>
+            </figcaption>
+          </figure>
+
+          <!-- Review 2 -->
+          <figure class="card" data-reveal style="margin: 0; border-radius: 18px; padding: 32px; display: flex; flex-direction: column; gap: 18px">
+            <svg width="34" height="26" viewBox="0 0 34 26" aria-hidden="true">
+              <path d="M0 26 V14 C0 6 5 1 13 0 V6 C9 7 7 9 7 13 H13 V26 z M20 26 V14 C20 6 25 1 33 0 V6 C29 7 27 9 27 13 H33 V26 z" fill="var(--accent)"></path>
+            </svg>
+            <blockquote style="margin: 0; font-size: 17px; font-weight: 500; line-height: 1.55; color: var(--text-main)">
+              "For our 600-person Diwali celebration, Annam managed a traditional 18-course sadya on fresh banana leaves with live appam and stew counters. The execution was military-grade clean, punctual, and our leadership team was blown away."
+            </blockquote>
+            <figcaption style="margin-top: auto; padding-top: 18px; border-top: 1px solid rgba(18,53,36,.12); display: flex; flex-direction: column; gap: 3px">
+              <strong style="color: var(--green-dark); font-size: 16px">Arvind Swaminathan, VP People Operations</strong>
+              <span style="font-size: 14px; color: var(--text-muted)">CRED · Festive Celebration (600 guests)</span>
+            </figcaption>
+          </figure>
+
+          <!-- Review 3 -->
+          <figure class="card" data-reveal style="margin: 0; border-radius: 18px; padding: 32px; display: flex; flex-direction: column; gap: 18px">
+            <svg width="34" height="26" viewBox="0 0 34 26" aria-hidden="true">
+              <path d="M0 26 V14 C0 6 5 1 13 0 V6 C9 7 7 9 7 13 H13 V26 z M20 26 V14 C20 6 25 1 33 0 V6 C29 7 27 9 27 13 H33 V26 z" fill="var(--accent)"></path>
+            </svg>
+            <blockquote style="margin: 0; font-size: 17px; font-weight: 500; line-height: 1.55; color: var(--text-main)">
+              "Managing corporate catering across 3 floors used to be an administrative nightmare. With Annam, we have one dedicated point of contact, one transparent monthly GST invoice, and zero employee complaints in 14 months."
+            </blockquote>
+            <figcaption style="margin-top: auto; padding-top: 18px; border-top: 1px solid rgba(18,53,36,.12); display: flex; flex-direction: column; gap: 3px">
+              <strong style="color: var(--green-dark); font-size: 16px">Sneha Kulkarni, Director of Facilities</strong>
+              <span style="font-size: 14px; color: var(--text-muted)">Swiggy Tech Centre · Cafeteria Management</span>
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 13: FAQ ACCORDION -->
+    <section id="faq" style="max-width: 1280px; margin: 0 auto; padding: 100px 32px; display: flex; flex-wrap: wrap; gap: 56px; align-items: flex-start">
+      <div data-reveal style="flex: 1 1 340px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+        <span style="display: inline-flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--green-dark)">
+          <span aria-hidden="true" style="display: inline-block; width: 28px; height: 3px; border-radius: 2px; background: var(--accent)"></span>
+          FAQs
+        </span>
+        <h2 style="margin: 0; font-weight: 800; font-size: clamp(30px, 3.4vw, 46px); line-height: 1.12; letter-spacing: -0.025em; color: var(--green-dark)">
+          Questions we hear before every contract.
+        </h2>
+        <p style="margin: 0; color: var(--text-muted); font-size: 16px">
+          Need custom dietary setups or multi-shift rotations? Talk directly to our catering lead.
+        </p>
+        <a class="btn btn-line" href="#enquire" style="align-self: flex-start; margin-top: 8px">Talk to Us</a>
+      </div>
+
+      <div data-reveal style="flex: 1.6 1 520px; min-width: 0; display: flex; flex-direction: column">
+        <!-- FAQ 1 -->
+        <div class="faq-item open">
+          <h3>
+            <button type="button" class="faq-btn" onclick="toggleFaq(this)" aria-expanded="true">
+              <span>What is the minimum order size?</span>
+              <span class="faq-sign" aria-hidden="true">−</span>
+            </button>
+          </h3>
+          <div class="faq-content">
+            <p style="margin: 0; padding: 0 40px 22px 0; color: var(--text-muted); font-size: 15px">
+              Daily workplace meal programmes start from 30 meals a day. One-off boardroom meetings, festive events and town halls start from 25 guests.
+            </p>
+          </div>
+        </div>
+
+        <!-- FAQ 2 -->
+        <div class="faq-item">
+          <h3>
+            <button type="button" class="faq-btn" onclick="toggleFaq(this)" aria-expanded="false">
+              <span>How much advance notice do you require?</span>
+              <span class="faq-sign" aria-hidden="true">+</span>
+            </button>
+          </h3>
+          <div class="faq-content">
+            <p style="margin: 0; padding: 0 40px 22px 0; color: var(--text-muted); font-size: 15px">
+              24 to 48 hours for executive meetings and boardroom lunches, and 3 to 5 days for large corporate events. Daily office programmes go live within 4 business days of signing off.
+            </p>
+          </div>
+        </div>
+
+        <!-- FAQ 3 -->
+        <div class="faq-item">
+          <h3>
+            <button type="button" class="faq-btn" onclick="toggleFaq(this)" aria-expanded="false">
+              <span>Do you serve both vegetarian and non-vegetarian food?</span>
+              <span class="faq-sign" aria-hidden="true">+</span>
+            </button>
+          </h3>
+          <div class="faq-content">
+            <p style="margin: 0; padding: 0 40px 22px 0; color: var(--text-muted); font-size: 15px">
+              Yes. Vegetarian food is cooked in completely segregated kitchen sections with dedicated cookware, packed in separate boxes, and served on independent counters. Pure Jain, satvik, and vegan menus are readily available.
+            </p>
+          </div>
+        </div>
+
+        <!-- FAQ 4 -->
+        <div class="faq-item">
+          <h3>
+            <button type="button" class="faq-btn" onclick="toggleFaq(this)" aria-expanded="false">
+              <span>How does corporate billing and GST work?</span>
+              <span class="faq-sign" aria-hidden="true">+</span>
+            </button>
+          </h3>
+          <div class="faq-content">
+            <p style="margin: 0; padding: 0 40px 22px 0; color: var(--text-muted); font-size: 15px">
+              You receive one consolidated itemized GST invoice at the end of each calendar month. We support net-15 / net-30 vendor payment terms for established corporate entities.
+            </p>
+          </div>
+        </div>
+
+        <!-- FAQ 5 -->
+        <div class="faq-item">
+          <h3>
+            <button type="button" class="faq-btn" onclick="toggleFaq(this)" aria-expanded="false">
+              <span>Which tech hubs and tech parks do you deliver to?</span>
+              <span class="faq-sign" aria-hidden="true">+</span>
+            </button>
+          </h3>
+          <div class="faq-content">
+            <p style="margin: 0; padding: 0 40px 22px 0; color: var(--text-muted); font-size: 15px">
+              Across Bangalore: Outer Ring Road (ORR), Whitefield, Bellandur, Electronic City, Koramangala, Indiranagar, Manyata Tech Park. Also serving Hyderabad (Hitec City, Gachibowli) and Chennai (OMR, Guindy).
+            </p>
+          </div>
+        </div>
+
+        <!-- FAQ 6 -->
+        <div class="faq-item">
+          <h3>
+            <button type="button" class="faq-btn" onclick="toggleFaq(this)" aria-expanded="false">
+              <span>Can we taste the food before committing to a contract?</span>
+              <span class="faq-sign" aria-hidden="true">+</span>
+            </button>
+          </h3>
+          <div class="faq-content">
+            <p style="margin: 0; padding: 0 40px 22px 0; color: var(--text-muted); font-size: 15px">
+              Absolutely! We arrange a complimentary tasting spread at your office for decision-makers and key employee representatives before any agreement is signed.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 14: ENQUIRE & PROPOSAL FORM -->
+    <section id="enquire" class="on-dark" style="background: var(--green-dark); color: #FFFFFF">
+      <div style="max-width: 1280px; margin: 0 auto; padding: 100px 32px; display: flex; flex-wrap: wrap; gap: 56px; align-items: center">
+        <div data-reveal style="flex: 1 1 380px; min-width: 0; display: flex; flex-direction: column; gap: 20px">
+          <span style="display: inline-flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase">
+            <span aria-hidden="true" style="display: inline-block; width: 28px; height: 3px; border-radius: 2px; background: var(--accent)"></span>
+            Get a proposal
+          </span>
+          <h2 style="margin: 0; font-weight: 800; font-size: clamp(34px, 4vw, 54px); line-height: 1.08; letter-spacing: -0.03em">
+            Tell us your headcount. We will handle lunch.
+          </h2>
+          <p style="margin: 0; color: #C5D1C8; max-width: 460px; font-size: 16px">
+            Share a few details and receive a customized menu with a fixed per-person quote within 30 minutes. Complimentary tastings are on us.
+          </p>
+
+          <div style="display: flex; flex-direction: column; gap: 4px; margin-top: 10px; padding-top: 22px; border-top: 1px solid rgba(255,255,255,.2)">
+            <a href="tel:+919845012345" style="display: inline-flex; align-items: center; gap: 12px; min-height: 44px; text-decoration: none; color: #FFFFFF; font-weight: 700; font-size: 18px">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round"><path d="M5 4 H9 L11 9 L8.5 10.5 C9.6 12.8 11.2 14.4 13.5 15.5 L15 13 L20 15 V19 C20 19.6 19.6 20 19 20 C10.7 19.5 4.5 13.3 4 5 C4 4.4 4.4 4 5 4 z"></path></svg>
+              +91 98450 12345 (Phone / WhatsApp)
+            </a>
+            <a href="mailto:workplace@annamcatering.com" style="display: inline-flex; align-items: center; gap: 12px; min-height: 44px; text-decoration: none; color: #FFFFFF; font-weight: 700; font-size: 18px">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 7 L12 13 L21 7"></path></svg>
+              workplace@annamcatering.com
+            </a>
+            <span style="display: inline-flex; align-items: center; gap: 12px; min-height: 44px; color: #C5D1C8; font-size: 16px">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round"><path d="M12 21 C7 15.5 5 12.5 5 9.5 A7 7 0 0 1 19 9.5 C19 12.5 17 15.5 12 21 z"></path><circle cx="12" cy="9.5" r="2.5"></circle></svg>
+              Central Kitchen: 42 Indiranagar 100ft Rd, Bangalore
+            </span>
+          </div>
+        </div>
+
+        <!-- FORM CONTAINER -->
+        <div data-reveal style="flex: 1 1 480px; min-width: 0; padding: clamp(24px, 3vw, 42px); border-radius: 24px; background: #FFFFFF; color: var(--text-main); box-sizing: border-box; box-shadow: 0 30px 60px -30px rgba(0,0,0,0.5)">
+          
+          <!-- Success State -->
+          <div id="proposalSuccess" style="display: none;" class="menu-fade">
+            <div role="status" style="min-height: 420px; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 16px">
+              <svg width="56" height="56" viewBox="0 0 20 20" aria-hidden="true" style="flex: none">
+                <circle cx="10" cy="10" r="10" fill="var(--accent)"></circle>
+                <path d="M5.5 10.2 L8.7 13.2 L14.5 7" fill="none" stroke="#123524" stroke-width="2" stroke-linecap="round"></path>
+              </svg>
+              <h3 style="margin: 0; font-size: 32px; font-weight: 800; letter-spacing: -0.03em; color: var(--green-dark)">Thank you. Request received!</h3>
+              <p style="margin: 0; color: var(--text-muted); font-size: 16px; max-width: 420px">
+                Your dedicated account manager will be in touch within 30 minutes with a customized menu rotation, per-person pricing, and complimentary tasting slots.
+              </p>
+              <button class="btn btn-line" type="button" onclick="resetProposalForm()" style="margin-top: 12px">Send another request</button>
+            </div>
+          </div>
+
+          <!-- Active Form -->
+          <form id="proposalForm" onsubmit="handleProposalSubmit(event)" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px">
+            <div style="display: flex; flex-direction: column; gap: 5px">
+              <label for="q-name" style="font-size: 13px; font-weight: 700; color: var(--text-main)">Your Name *</label>
+              <input class="field" id="q-name" name="name" type="text" placeholder="John Doe" required>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 5px">
+              <label for="q-company" style="font-size: 13px; font-weight: 700; color: var(--text-main)">Company Name *</label>
+              <input class="field" id="q-company" name="company" type="text" placeholder="Acme Technologies" required>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 5px">
+              <label for="q-email" style="font-size: 13px; font-weight: 700; color: var(--text-main)">Work Email *</label>
+              <input class="field" id="q-email" name="email" type="email" placeholder="name@company.com" required>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 5px">
+              <label for="q-phone" style="font-size: 13px; font-weight: 700; color: var(--text-main)">Phone / WhatsApp *</label>
+              <input class="field" id="q-phone" name="phone" type="tel" placeholder="+91 98000 00000" required>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 5px">
+              <label for="q-type" style="font-size: 13px; font-weight: 700; color: var(--text-main)">Service Required</label>
+              <select class="field" id="q-type" name="type" style="cursor: pointer">
+                <option value="Daily meal programme">Daily meal programme</option>
+                <option value="Cafeteria and pantry management">Cafeteria and pantry management</option>
+                <option value="Meetings and boardroom">Meetings and boardroom lunch</option>
+                <option value="Conference or event">Conference or town hall event</option>
+                <option value="Festival or celebration">Festival or celebration feast</option>
+              </select>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 5px">
+              <label for="q-diet" style="font-size: 13px; font-weight: 700; color: var(--text-main)">Dietary Preference</label>
+              <select class="field" id="q-diet" name="diet" style="cursor: pointer">
+                <option value="Pure vegetarian">Pure vegetarian</option>
+                <option value="Vegetarian and non-vegetarian">Vegetarian & non-vegetarian</option>
+                <option value="Jain or no onion-garlic">Jain / No onion-garlic</option>
+                <option value="Vegan friendly">Vegan friendly</option>
+              </select>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 5px">
+              <label for="q-guests" style="font-size: 13px; font-weight: 700; color: var(--text-main)">Estimated Headcount *</label>
+              <input class="field" id="q-guests" name="guests" type="number" min="10" placeholder="e.g. 120" required oninput="calculateEstimate(this.value)">
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 5px">
+              <label for="q-date" style="font-size: 13px; font-weight: 700; color: var(--text-main)">Preferred Start / Event Date</label>
+              <input class="field" id="q-date" name="date" type="date">
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 5px; grid-column: 1 / -1">
+              <label for="q-notes" style="font-size: 13px; font-weight: 700; color: var(--text-main)">Office location, tech park & any specific requirements</label>
+              <textarea class="field" id="q-notes" name="notes" rows="3" placeholder="e.g. EcoWorld Tech Park, 4th Floor. Need daily lunch with tasting session next Tuesday..." style="padding: 12px 14px; resize: vertical"></textarea>
+            </div>
+            <button class="btn btn-accent" type="submit" style="grid-column: 1 / -1; min-height: 56px; font-size: 16px">Request a Proposal</button>
+            <p style="margin: 0; grid-column: 1 / -1; font-size: 13px; color: var(--text-muted); text-align: center">
+              We respond within 30 minutes. Your contact details are strictly confidential.
+            </p>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer style="background: #FFFFFF">
+    <div style="max-width: 1280px; margin: 0 auto; padding: 72px 32px 32px; display: flex; flex-direction: column; gap: 48px">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 40px">
+        <div style="display: flex; flex-direction: column; gap: 14px">
+          <span style="display: inline-flex; align-items: center; gap: 10px; font-weight: 800; font-size: 28px; letter-spacing: -0.03em; color: var(--green-dark)">
+            <span style="display: inline-block; width: 11px; height: 11px; border-radius: 50%; background: var(--accent)"></span>
+            Annam
+          </span>
+          <p style="margin: 0; color: var(--text-muted); font-size: 15px; line-height: 1.6">
+            Premier South Indian corporate catering for offices, tech campuses, leadership boardroom dining and large corporate celebrations.
+          </p>
+        </div>
+        <nav aria-label="Solutions" style="display: flex; flex-direction: column; font-size: 15px">
+          <strong style="margin-bottom: 12px; color: var(--green-dark); font-size: 16px">Solutions</strong>
+          <a href="#solutions" style="min-height: 36px; display: inline-flex; align-items: center; text-decoration: none; color: var(--text-muted)">Daily meal programmes</a>
+          <a href="#solutions" style="min-height: 36px; display: inline-flex; align-items: center; text-decoration: none; color: var(--text-muted)">Cafeteria management</a>
+          <a href="#solutions" style="min-height: 36px; display: inline-flex; align-items: center; text-decoration: none; color: var(--text-muted)">Boardroom dining</a>
+          <a href="#solutions" style="min-height: 36px; display: inline-flex; align-items: center; text-decoration: none; color: var(--text-muted)">Event & festive catering</a>
+        </nav>
+        <nav aria-label="Company" style="display: flex; flex-direction: column; font-size: 15px">
+          <strong style="margin-bottom: 12px; color: var(--green-dark); font-size: 16px">Company</strong>
+          <a href="#why" style="min-height: 36px; display: inline-flex; align-items: center; text-decoration: none; color: var(--text-muted)">Why Annam</a>
+          <a href="#kitchen" style="min-height: 36px; display: inline-flex; align-items: center; text-decoration: none; color: var(--text-muted)">Kitchen & food safety</a>
+          <a href="#plans" style="min-height: 36px; display: inline-flex; align-items: center; text-decoration: none; color: var(--text-muted)">Plans & pricing</a>
+          <a href="#faq" style="min-height: 36px; display: inline-flex; align-items: center; text-decoration: none; color: var(--text-muted)">FAQs</a>
+        </nav>
+        <div style="display: flex; flex-direction: column; font-size: 15px; color: var(--text-muted)">
+          <strong style="margin-bottom: 12px; color: var(--green-dark); font-size: 16px">Contact</strong>
+          <span style="min-height: 36px; display: inline-flex; align-items: center">+91 98450 12345</span>
+          <span style="min-height: 36px; display: inline-flex; align-items: center">workplace@annamcatering.com</span>
+          <span style="min-height: 36px; display: inline-flex; align-items: center">Indiranagar Central Kitchen, Bangalore</span>
+          <span style="min-height: 36px; display: inline-flex; align-items: center">Operating Hours: 6:00 AM – 9:00 PM</span>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; padding-top: 24px; border-top: 1px solid rgba(18,53,36,.14); font-size: 13px; color: var(--text-muted)">
+        <span>© 2026 Annam Catering Co. All rights reserved.</span>
+        <span>FSSAI Lic. No. 11223334000123 · GSTIN 29AAAAA0000A1Z5 · Privacy Policy · Terms of Service</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- FLOATING CHAT BUTTON -->
+  <a class="float-cta" href="#enquire" aria-label="Request a proposal">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20 L5.4 15.6 A8 8 0 1 1 8.6 18.7 z"></path></svg>
+    Chat with Us
+  </a>
+
+  <!-- SCRIPT -->
+  <script>
+    // --- MENU DATA ---
+    const MENU_DATA = {
+      tiffin: {
+        label: 'Tiffin & breakfast',
+        img: "${src('idliVadaBreakfast')}",
+        alt: 'Idlis on a banana leaf with sambar and chutney',
+        groups: [
+          {
+            title: 'From the steamer',
+            items: [
+              { name: 'Mallige idli, sambar & 3 chutneys', note: 'v' },
+              { name: 'Ghee ven pongal with brinjal gotsu', note: 'v' },
+              { name: 'Idiyappam with vegetable kurma', note: 'vg' }
+            ]
+          },
+          {
+            title: 'From the tawa',
+            items: [
+              { name: 'Ghee roast masala dosa', note: 'v' },
+              { name: 'Onion-tomato uttapam', note: 'v' },
+              { name: 'Fluffy appam with fresh coconut milk', note: 'vg' }
+            ]
+          },
+          {
+            title: 'To drink',
+            items: [
+              { name: 'Degree filter coffee (brass dabarah)', note: 'v' },
+              { name: 'Ginger-cardamom masala chai', note: 'v' },
+              { name: 'Fresh tender coconut water', note: 'vg' }
+            ]
+          }
+        ]
+      },
+      meals: {
+        label: 'Daily meals',
+        img: "${src('southIndianThali')}",
+        alt: 'Steel thali with rice, curries, curd and rotis seen from above',
+        groups: [
+          {
+            title: 'On the thali',
+            items: [
+              { name: 'Steamed ponni rice & soft phulkas', note: 'vg' },
+              { name: 'Murungakkai sambar & pepper rasam', note: 'vg' },
+              { name: 'Cabbage poriyal & chana kootu', note: 'vg' },
+              { name: 'Set curd, appalam & cut mango pickle', note: 'v' }
+            ]
+          },
+          {
+            title: 'Non-veg specials',
+            items: [
+              { name: 'Chettinad pepper chicken curry', note: 'non-veg' },
+              { name: 'Andhra spicy kodi kura', note: 'non-veg' },
+              { name: 'Alleppey fish curry with raw mango', note: 'non-veg' }
+            ]
+          },
+          {
+            title: 'Specialty rice',
+            items: [
+              { name: 'Hot bisi bele bath with potato crisps', note: 'v' },
+              { name: 'Tangy puliyogare & lemon rice', note: 'vg' },
+              { name: 'Thalicha curd rice with pomegranate', note: 'v' }
+            ]
+          }
+        ]
+      },
+      events: {
+        label: 'Events & biryani',
+        img: "${src('dumBiryani')}",
+        alt: 'Large pan of biryani with onions and herbs',
+        groups: [
+          {
+            title: 'Dum Biryani',
+            items: [
+              { name: 'Hyderabadi chicken dum biryani, mirchi ka salan', note: 'non-veg' },
+              { name: 'Ambur mutton seera samba biryani', note: 'non-veg' },
+              { name: 'Subz nawabi vegetable dum biryani, burani raita', note: 'v' }
+            ]
+          },
+          {
+            title: 'Banana-leaf feast',
+            items: [
+              { name: 'Kerala avial, beetroot thoran & olan', note: 'v' },
+              { name: 'Mor kuzhambu & pineapple pulissery', note: 'v' },
+              { name: 'Crispy appalam, inji puli & vadam', note: 'vg' }
+            ]
+          },
+          {
+            title: 'Live stations',
+            items: [
+              { name: 'Live mini podi dosa & uttapam counter', note: 'v' },
+              { name: 'Live appam with vegetable or mutton stew', note: 'vg' },
+              { name: 'Live froth filter coffee station', note: 'v' }
+            ]
+          }
+        ]
+      },
+      sweets: {
+        label: 'Sweets & high tea',
+        img: "${src('appamSweets')}",
+        alt: 'Traditional sweets and savouries spread',
+        groups: [
+          {
+            title: 'Traditional sweets',
+            items: [
+              { name: 'Melt-in-mouth ghee Mysore pak', note: 'v' },
+              { name: 'Tender coconut laddu with pistachios', note: 'v' },
+              { name: 'Pineapple kesari bath with cashews', note: 'v' },
+              { name: 'Elaneer (tender coconut) payasam', note: 'v' }
+            ]
+          },
+          {
+            title: 'Crispy savouries',
+            items: [
+              { name: 'Crunchy paruppu masala vada', note: 'vg' },
+              { name: 'Andhra mirchi bajji with onion stuffing', note: 'vg' },
+              { name: 'Kai murukku & Madras ribbon pakoda', note: 'vg' }
+            ]
+          },
+          {
+            title: 'Beverages',
+            items: [
+              { name: 'Fresh filter coffee & masala chai', note: 'v' },
+              { name: 'Spiced buttermilk with curry leaves', note: 'v' },
+              { name: 'Fresh mint nimbu soda', note: 'vg' }
+            ]
+          }
+        ]
+      }
+    };
+
+    // --- SLIDER LOGIC ---
+    const SLIDES_DATA = [
+      { cap: 'Team lunch, served at your office' },
+      { cap: 'Festive sadya on the leaf' },
+      { cap: 'Staffed counters, set up for you' },
+      { cap: 'Boardroom thali lunches' }
+    ];
+    let currentSlide = 0;
+    let slideTimer = null;
+
+    function setSlide(index) {
+      currentSlide = index;
+      const slides = document.querySelectorAll('.hero-slide');
+      const dots = document.querySelectorAll('.slide-dot span');
+      const caption = document.getElementById('slideCaption');
+
+      slides.forEach((s, idx) => {
+        const img = s.querySelector('img');
+        if (idx === index) {
+          s.style.opacity = '1';
+          if (img) img.style.transform = 'scale(1.06)';
+        } else {
+          s.style.opacity = '0';
+          if (img) img.style.transform = 'scale(1)';
+        }
+      });
+
+      dots.forEach((d, idx) => {
+        if (idx === index) {
+          d.style.width = '24px';
+          d.style.background = 'var(--green-dark)';
+        } else {
+          d.style.width = '8px';
+          d.style.background = 'rgba(18,53,36,.3)';
+        }
+      });
+
+      if (caption && SLIDES_DATA[index]) {
+        caption.textContent = SLIDES_DATA[index].cap;
+      }
+    }
+
+    function startSlideShow() {
+      stopSlideShow();
+      slideTimer = setInterval(() => {
+        const next = (currentSlide + 1) % SLIDES_DATA.length;
+        setSlide(next);
+      }, 5000);
+    }
+
+    function stopSlideShow() {
+      if (slideTimer) clearInterval(slideTimer);
+    }
+
+    const sliderEl = document.getElementById('heroSlider');
+    if (sliderEl) {
+      sliderEl.addEventListener('mouseenter', stopSlideShow);
+      sliderEl.addEventListener('mouseleave', startSlideShow);
+    }
+
+    // --- MENU TAB SWITCHING ---
+    function renderMenu(key) {
+      const data = MENU_DATA[key];
+      if (!data) return;
+
+      const imgEl = document.getElementById('menuDisplayImg');
+      const containerEl = document.getElementById('menuGroupsContainer');
+      const displayContainer = document.getElementById('menuDisplayContainer');
+
+      if (imgEl) {
+        imgEl.src = data.img;
+        imgEl.alt = data.alt;
+      }
+
+      if (containerEl) {
+        let html = '';
+        data.groups.forEach(g => {
+          html += '<div style="display: flex; flex-direction: column; gap: 12px">';
+          html += '<h3 style="margin: 0 0 4px; padding-bottom: 8px; border-bottom: 2px solid var(--accent); font-size: 14px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--green-dark)">' + g.title + '</h3>';
+          g.items.forEach(it => {
+            const tagStyle = it.note === 'vg' ? 'background: #FFF3E0; color: #E65100;' : (it.note === 'v' ? 'background: #E8F5E9; color: #2E7D32;' : 'background: #FCE4EC; color: #C2185B;');
+            html += '<p style="margin: 0; display: flex; align-items: baseline; justify-content: space-between; gap: 12px; font-size: 15px; font-weight: 500">';
+            html += '<span>' + it.name + '</span>';
+            html += '<span style="font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 4px; ' + tagStyle + '">' + it.note + '</span>';
+            html += '</p>';
+          });
+          html += '</div>';
+        });
+        containerEl.innerHTML = html;
+      }
+
+      if (displayContainer) {
+        displayContainer.style.animation = 'none';
+        void displayContainer.offsetHeight;
+        displayContainer.style.animation = 'fadeUp .4s ease both';
+      }
+    }
+
+    function switchMenu(key, btn) {
+      document.querySelectorAll('.menu-tab-btn').forEach(b => {
+        b.style.background = '#FFFFFF';
+        b.style.color = 'var(--green-dark)';
+      });
+      if (btn) {
+        btn.style.background = 'var(--green-dark)';
+        btn.style.color = '#FFFFFF';
+      }
+      renderMenu(key);
+    }
+
+    // --- KITCHEN VIDEO PLAYER ---
+    function toggleKitchenVideo() {
+      const v = document.getElementById('kitchenVideo');
+      const label = document.getElementById('videoLabel');
+      const playIcon = document.getElementById('playIcon');
+      if (!v) return;
+
+      if (v.paused) {
+        v.play();
+        if (label) label.textContent = 'Pause film';
+        if (playIcon) playIcon.innerHTML = '<rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect>';
+      } else {
+        v.pause();
+        if (label) label.textContent = 'Play film';
+        if (playIcon) playIcon.innerHTML = '<polygon points="5 3 19 12 5 21 5 3"></polygon>';
+      }
+    }
+
+    function toggleKitchenAudio() {
+      const v = document.getElementById('kitchenVideo');
+      const muteIcon = document.getElementById('muteIcon');
+      if (!v) return;
+
+      v.muted = !v.muted;
+      if (muteIcon) {
+        if (v.muted) {
+          muteIcon.innerHTML = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line>';
+        } else {
+          muteIcon.innerHTML = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>';
+        }
+      }
+    }
+
+    // --- FAQ ACCORDION ---
+    function toggleFaq(btn) {
+      const item = btn.closest('.faq-item');
+      if (!item) return;
+      const isOpen = item.classList.contains('open');
+
+      // Close other items
+      document.querySelectorAll('.faq-item').forEach(it => {
+        if (it !== item) {
+          it.classList.remove('open');
+          const b = it.querySelector('.faq-btn');
+          const sign = it.querySelector('.faq-sign');
+          if (b) b.setAttribute('aria-expanded', 'false');
+          if (sign) sign.textContent = '+';
+        }
+      });
+
+      if (isOpen) {
+        item.classList.remove('open');
+        btn.setAttribute('aria-expanded', 'false');
+        item.querySelector('.faq-sign').textContent = '+';
+      } else {
+        item.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+        item.querySelector('.faq-sign').textContent = '−';
+      }
+    }
+
+    // --- FORM HANDLERS ---
+    function handleHeroSubmit(e) {
+      e.preventDefault();
+      const form = document.getElementById('heroForm');
+      const success = document.getElementById('heroSuccess');
+      if (form) form.style.display = 'none';
+      if (success) success.style.display = 'block';
+    }
+
+    function handleProposalSubmit(e) {
+      e.preventDefault();
+      const form = document.getElementById('proposalForm');
+      const success = document.getElementById('proposalSuccess');
+      if (form) form.style.display = 'none';
+      if (success) success.style.display = 'block';
+    }
+
+    function resetProposalForm() {
+      const form = document.getElementById('proposalForm');
+      const success = document.getElementById('proposalSuccess');
+      if (form) {
+        form.reset();
+        form.style.display = 'grid';
+      }
+      if (success) success.style.display = 'none';
+    }
+
+    function prefillService(serviceName) {
+      const select = document.getElementById('q-type');
+      if (select) {
+        for (let i = 0; i < select.options.length; i++) {
+          if (select.options[i].text.toLowerCase().includes(serviceName.toLowerCase())) {
+            select.selectedIndex = i;
+            break;
+          }
+        }
+      }
+    }
+
+    function calculateEstimate(headcount) {
+      const count = parseInt(headcount, 10);
+      if (isNaN(count) || count <= 0) return;
+      // updates dynamic feedback or placeholder if needed
+    }
+
+    // --- MOBILE MENU ---
+    function toggleMobileNav() {
+      const nav = document.getElementById('mobileNav');
+      if (nav) nav.classList.toggle('open');
+    }
+    const mobileBtn = document.getElementById('mobileMenuToggle');
+    if (mobileBtn) mobileBtn.addEventListener('click', toggleMobileNav);
+
+    // --- SCROLL REVEAL OBSERVER ---
+    document.addEventListener('DOMContentLoaded', () => {
+      // Initialize first menu tab
+      renderMenu('tiffin');
+      // Start hero slider
+      startSlideShow();
+
+      // Intersection Observer for scroll animations
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('data-in');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12 });
+
+      document.querySelectorAll('[data-reveal]').forEach(el => observer.observe(el));
+
+      // Attempt to play video muted once in view
+      const videoEl = document.getElementById('kitchenVideo');
+      if (videoEl && 'IntersectionObserver' in window) {
+        const videoObserver = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const playPromise = videoEl.play();
+              if (playPromise !== undefined) {
+                playPromise.then(() => {
+                  const label = document.getElementById('videoLabel');
+                  const playIcon = document.getElementById('playIcon');
+                  if (label) label.textContent = 'Pause film';
+                  if (playIcon) playIcon.innerHTML = '<rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect>';
+                }).catch(() => {});
+              }
+              videoObserver.unobserve(videoEl);
+            }
+          });
+        }, { threshold: 0.3 });
+        videoObserver.observe(videoEl);
+      }
+    });
+  </script>
+</body>
+</html>`;
+}
+
+// 1. Generate standalone self-contained HTML for "C:\coding\Corporate Catering Website – Home.html"
+console.log('Generating self-contained HTML for C:\\coding\\Corporate Catering Website – Home.html ...');
+const selfContainedHTML = generateHTML(true);
+fs.writeFileSync('C:/coding/Corporate Catering Website – Home.html', selfContainedHTML, 'utf8');
+console.log(`Saved C:\\coding\\Corporate Catering Website – Home.html (${selfContainedHTML.length} bytes)`);
+
+// 2. Generate clean relative index.html in "c:\coding\corparate catering\index.html"
+console.log('Generating modular index.html in c:\\coding\\corparate catering ...');
+const modularHTML = generateHTML(false);
+fs.writeFileSync(path.join(baseDir, 'index.html'), modularHTML, 'utf8');
+console.log(`Saved c:\\coding\\corparate catering\\index.html (${modularHTML.length} bytes)`);
+
